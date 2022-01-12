@@ -29,12 +29,27 @@ export class HPComponent implements OnInit {
 
   pf: string = "FB";
   page: number = 1;
+  page_arr: Array<number> = [1];
 
   FB:PF = {
     post_arr: []
   };
   FORUM:PF = {
     post_arr: []
+  }
+
+  count_final_page():void{
+    this.page_arr = [];
+    let p_length = 0;
+    if(this.pf === "FB"){
+      p_length = Math.ceil(this.FB.post_arr.length / 10) + 1;
+    } else if(this.pf === "FORUM"){
+      p_length = Math.ceil(this.FORUM.post_arr.length / 10) + 1;
+    }
+    for (let i = 1; i < p_length; i++) {
+      this.page_arr.push(i);
+    }
+    console.log(this.page_arr)
   }
 
   ngOnInit(): void {
@@ -64,7 +79,8 @@ export class HPComponent implements OnInit {
             temp_arr.push(item);
           }
           arr = temp_arr;
-          this.FORUM.post_arr = temp_arr;
+          this.FORUM.post_arr = temp_arr.slice(0, 110);
+          this.count_final_page();
 
         }
         if ("fb_raw" in resp.data[0]) {
@@ -80,10 +96,11 @@ export class HPComponent implements OnInit {
             temp_arr.push(item);
           }
           arr = temp_arr;
-          this.FB.post_arr = temp_arr;
+          this.FB.post_arr = temp_arr.slice(0,125);
+          this.count_final_page();
 
         }
-        console.log(arr)
+        console.log(this)
       })
       .catch(e => {
         console.log('錯誤描述: ' + e.message);

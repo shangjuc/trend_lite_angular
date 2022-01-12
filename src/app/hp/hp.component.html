@@ -1,11 +1,11 @@
 <h1>Hot Posts</h1>
 
 <div class="pf-btn-container">
-  <button (click)="pf = item; page = 1" *ngFor="let item of ['FB','FORUM']" [ngClass]="{active: pf === item}">{{item}}</button>
+  <button (click)="pf = item; page = 1; count_final_page()" *ngFor="let item of ['FB','FORUM']" [ngClass]="{active: pf === item}">{{item}}</button>
 </div>
 
 <div class="page-btn-container">
-  <button (click)="page = item" *ngFor="let item of [1,2,3,4,5]" [ngClass]="{active: page === item}">{{item}}</button>
+  <button (click)="page = item" *ngFor="let item of page_arr" [ngClass]="{active: page === item}">{{item}}</button>
 </div>
 
 
