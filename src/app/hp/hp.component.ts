@@ -49,7 +49,7 @@ export class HPComponent implements OnInit {
     for (let i = 1; i < p_length; i++) {
       this.page_arr.push(i);
     }
-    console.log(this.page_arr)
+    // console.log(this.page_arr)
   }
 
   ngOnInit(): void {

@@ -1,15 +1,16 @@
 h1{
-  color: red;
+  color: #1b9aac;
 }
 div.pf-btn-container,
 div.page-btn-container{
-  padding: 0px;
+  padding: 5px;
   display: flex;
   button{
     padding: 5px 10px;
     background-color: #fff;
     border: 1px solid #333;
     border-radius: 5px;
+    margin: 0px 1px;
     cursor: pointer;
     &.active{
       background-color: #eee;
@@ -18,14 +19,22 @@ div.page-btn-container{
 }
 ul.post-container{
   padding: 0px;
+  min-height: 500px;
   li {
     display: flex;
     list-style: none;
     height: 50px;
     overflow: hidden;
+    border: 1px solid #eee;
+    border-width: 1px 0px 0px;
+
+    &:last-child{
+      border-width: 1px 0px 1px;
+    }
 
     div{
       border: 1px solid #eee;
+      border-width: 0px 1px 0px 0px;
       padding: 10px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -35,6 +44,7 @@ ul.post-container{
         flex-basis: 50px;
         text-align: center;
         flex-shrink: 0;
+        border-left: 1px solid #eee;
       }
       &.from_name,
       &.board{
