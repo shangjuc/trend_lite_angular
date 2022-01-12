@@ -1,0 +1,30 @@
+<h1>Hot Posts</h1>
+
+<div class="pf-btn-container">
+  <button (click)="pf = item; page = 1" *ngFor="let item of ['FB','FORUM']" [ngClass]="{active: pf === item}">{{item}}</button>
+</div>
+
+<div class="page-btn-container">
+  <button (click)="page = item" *ngFor="let item of [1,2,3,4,5]" [ngClass]="{active: page === item}">{{item}}</button>
+</div>
+
+
+<ul class="post-container" *ngIf="pf === 'FB'">
+  <ng-container *ngFor="let item of FB.post_arr; let i=index">
+    <li *ngIf="i < page * 10 && i >= (page-1) * 10">
+      <div class="hash">{{item.hash}}</div>
+      <div class="from_name">{{item.from_name}}</div>
+      <div class="content">{{item.content}}</div>
+    </li>
+  </ng-container>
+</ul>
+
+<ul class="post-container" *ngIf="pf === 'FORUM'">
+  <ng-container *ngFor="let item of FORUM.post_arr; let i=index">
+    <li *ngIf="i < page * 10 && i >= (page-1) * 10">
+      <div class="hash">{{item.hash}}</div>
+      <div class="board">{{item.board}}</div>
+      <div class="content">{{item.content}}</div>
+    </li>
+  </ng-container>
+</ul>

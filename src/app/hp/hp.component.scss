@@ -1,0 +1,49 @@
+h1{
+  color: red;
+}
+div.pf-btn-container,
+div.page-btn-container{
+  padding: 0px;
+  display: flex;
+  button{
+    padding: 5px 10px;
+    background-color: #fff;
+    border: 1px solid #333;
+    border-radius: 5px;
+    cursor: pointer;
+    &.active{
+      background-color: #eee;
+    }
+  }
+}
+ul.post-container{
+  padding: 0px;
+  li {
+    display: flex;
+    list-style: none;
+    height: 50px;
+    overflow: hidden;
+
+    div{
+      border: 1px solid #eee;
+      padding: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      box-sizing: border-box;
+      &.hash{
+        flex-basis: 50px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      &.from_name,
+      &.board{
+        flex-basis: 150px;
+      }
+      &.content{
+        flex-basis: 500px;
+        flex-grow: 1;
+      }
+    }
+  }
+}
