@@ -22,19 +22,20 @@ ul.post-container{
   min-height: 500px;
   li {
     display: flex;
+    align-items: center;
     list-style: none;
     height: 50px;
     overflow: hidden;
-    border: 1px solid #eee;
-    border-width: 1px 0px 0px;
+    border: 2px solid #eee;
+    border-width: 2px 0px 0px;
 
     &:last-child{
-      border-width: 1px 0px 1px;
+      border-width: 2px 0px 1px;
     }
 
     div{
-      border: 1px solid #eee;
-      border-width: 0px 1px 0px 0px;
+      border: 2px solid #eee;
+      border-width: 0px 2px 0px 0px;
       padding: 10px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -44,7 +45,7 @@ ul.post-container{
         flex-basis: 50px;
         text-align: center;
         flex-shrink: 0;
-        border-left: 1px solid #eee;
+        border-left: 2px solid #eee;
       }
       &.from_name,
       &.board{

@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 interface PFS {
-  FB: PF,
-  FORUM: PF,
+  [pf:string]: PF,
+  // FORUM: PF,
 }
 
 interface PF {
-  post_arr: Array<Post>
+  [post_arr:string]: Array<Post>
 }
 
 interface Post {
@@ -30,21 +30,45 @@ export class HPComponent implements OnInit {
   pf: string = "FB";
   page: number = 1;
   page_arr: Array<number> = [1];
+  open_post_arr: Array<number> = [0];
 
   FB:PF = {
-    post_arr: []
+    ["post_arr"]: []
   };
   FORUM:PF = {
-    post_arr: []
+    ["post_arr"]: []
+  }
+
+  HP:PFS = {
+    FB: this.FB,
+    FORUM: this.FORUM,
+  }
+
+  toggle_post_open(post_idx: number):void{
+    if (this.open_post_arr.includes(post_idx)){
+      this.open_post_arr.splice(this.open_post_arr.indexOf(post_idx), 1);
+    }else{
+      this.open_post_arr.push(post_idx);
+    }
+    console.log(this.open_post_arr)
+  }
+
+  toggle_post_open_all(tf:boolean):void{
+    this.open_post_arr = [];
+    if(tf){
+      for(let i = (this.page - 1) * 10; i < this.page * 10; i++){
+        this.open_post_arr.push(i)
+      }
+    }
   }
 
   count_final_page():void{
     this.page_arr = [];
     let p_length = 0;
     if(this.pf === "FB"){
-      p_length = Math.ceil(this.FB.post_arr.length / 10) + 1;
+      p_length = Math.ceil(this.FB["post_arr"].length / 10) + 1;
     } else if(this.pf === "FORUM"){
-      p_length = Math.ceil(this.FORUM.post_arr.length / 10) + 1;
+      p_length = Math.ceil(this.FORUM["post_arr"].length / 10) + 1;
     }
     for (let i = 1; i < p_length; i++) {
       this.page_arr.push(i);
@@ -74,12 +98,14 @@ export class HPComponent implements OnInit {
             let item: Post = raw[i];
             item.pf = "FORUM";
             item.hash = i + 1;
+            item.from_name = item.board;
+
             // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
             // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
             temp_arr.push(item);
           }
           arr = temp_arr;
-          this.FORUM.post_arr = temp_arr.slice(0, 110);
+          this.FORUM["post_arr"] = temp_arr.slice(0, 110);
           this.count_final_page();
 
         }
@@ -96,7 +122,7 @@ export class HPComponent implements OnInit {
             temp_arr.push(item);
           }
           arr = temp_arr;
-          this.FB.post_arr = temp_arr.slice(0,125);
+          this.FB["post_arr"] = temp_arr.slice(0,125);
           this.count_final_page();
 
         }
