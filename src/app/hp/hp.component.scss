@@ -30,13 +30,13 @@ ul.post-container{
     border-width: 2px 0px 0px;
 
     &:last-child{
-      border-width: 2px 0px 1px;
+      border-width: 2px 0px 2px;
     }
 
     div{
       border: 2px solid #eee;
       border-width: 0px 2px 0px 0px;
-      padding: 10px;
+      padding: 10px 0px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

@@ -2,7 +2,7 @@
 
 <div class="pf-btn-container flex justify-between">
   <div class="container-left">
-    <button class="py-1 px-3" (click)="pf = item; page = 1; count_final_page()" *ngFor="let item of ['FB','FORUM']" [ngClass]="{active: pf === item}">{{item}}</button>
+    <button class="py-1 px-3" (click)="pf = item; page = 1; count_final_page(); post_open_arr = [];" *ngFor="let item of ['FB','FORUM']" [ngClass]="{active: pf === item}">{{item}}</button>
   </div>
   <div class="container-right">
     <button class="py-1 px-3" (click)="toggle_post_open_all(true)">Open all</button>
@@ -15,14 +15,14 @@
 
 <ng-container *ngFor="let pf_item of ['FB','FORUM']">
   <ul class="post-container" *ngIf="pf ===  pf_item">
-    <ng-container *ngFor="let item of HP[pf_item]['post_arr']; let i=index">
+    <ng-container *ngFor="let item of HP[pf_item].post_arr; let i=index">
       <ng-container *ngIf="i < page * 10 && i >= (page-1) * 10">
         <li>
           <div class="hash cursor-pointer" (click)="toggle_post_open(i)">{{item.hash}}</div>
           <div class="from_name">{{item.from_name}}</div>
           <div class="content">{{item.content}}</div>
         </li>
-        <div class="card-container  py-8 px-8 bg-slate-100 max-h-96 overflow-auto" *ngIf="open_post_arr.includes(i)">
+        <div class="card-container  py-8 px-8 bg-slate-100 max-h-96 overflow-auto" *ngIf="post_open_arr.includes(i)">
           <div class="card border-2  rounded-md p-8 bg-white">
             <h1 class="pb-4 ">{{item.from_name}}</h1>
             <p class="whitespace-pre-wrap">{{item.content}}</p>
@@ -38,6 +38,18 @@
 
 
 <div class="page-btn-container flex justify-center">
-  <button class="py-1 px-2" (click)="page = item" *ngFor="let item of page_arr"
-    [ngClass]="{active: page === item}">{{item}}</button>
+  <button class="py-1 px-2 w-9" (click)="page = 1" [ngClass]="{active: page === 1}">1</button>
+  <span class="py-1 px-2 w-9" *ngIf="page_arr.length > 10 && page > 4">...</span>
+  <ng-container *ngFor="let item of page_arr">
+    <ng-container *ngIf="
+    item !== 1 && item !== page_arr[page_arr.length-1] &&
+    ( page_arr.length < 11
+    || (item < 6 && page < 5)
+    || (item > page_arr[page_arr.length - 6] && page > page_arr[page_arr.length - 5])
+    || (item < page + 2 && item > page - 2 ))">
+      <button class="py-1 px-2 w-9" (click)="page = item" [ngClass]="{active: page === item}">{{item}}</button>
+    </ng-container>
+  </ng-container>
+  <span class="py-1 px-2 w-9" *ngIf="page_arr.length > 10 && page < page_arr[page_arr.length-4]">...</span>
+  <button class="py-1 px-2 w-9" (click)="page = page_arr[page_arr.length-1]" [ngClass]="{active: page === page_arr[page_arr.length-1]}">{{page_arr[page_arr.length-1]}}</button>
 </div>
