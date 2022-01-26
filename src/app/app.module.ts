@@ -3,14 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HPComponent } from './hp/hp.component';
-import { LcComponent } from './lc/lc.component';
+import { HotPostComponent } from './hp/hp.component';
+import { LineChartComponent } from './lc/lc.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HPComponent,
-    LcComponent
+    HotPostComponent,
+    LineChartComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

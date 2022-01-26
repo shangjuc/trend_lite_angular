@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './lc.component.html',
   styleUrls: ['./lc.component.scss']
 })
-export class LcComponent implements OnInit {
+export class LineChartComponent implements OnInit {
 
   constructor() { }
 

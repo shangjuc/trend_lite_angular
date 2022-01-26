@@ -22,7 +22,7 @@ interface Post {
   styleUrls: ['./hp.component.scss']
 })
 
-export class HPComponent implements OnInit {
+export class HotPostComponent implements OnInit {
 
   constructor() { }
 
