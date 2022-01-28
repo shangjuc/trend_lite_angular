@@ -42,6 +42,7 @@ export class HotPostComponent implements OnInit {
     FB: this.FB,
     FORUM: this.FORUM,
   }
+  
 
   toggle_post_open(post_idx: number):void{
     if (this.post_open_arr.includes(post_idx)){
@@ -77,6 +78,14 @@ export class HotPostComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    // console.log(window.location);
+
+    let urlstr:string = document.location.toString();
+    let params = new URL(urlstr).searchParams;
+    let st = params.get('st');
+    let query = params.get('q');
+    console.log(st,query);
 
     async function myFetch() {
       let response = await fetch('http://localhost:3000/trendapi/api_analytics_hotpost');
