@@ -80,6 +80,7 @@ export class HotPostComponent implements OnInit {
   ngOnInit(): void {
 
     // console.log(window.location);
+    // SJC
 
     let urlstr:string = document.location.toString();
     let params = new URL(urlstr).searchParams;
