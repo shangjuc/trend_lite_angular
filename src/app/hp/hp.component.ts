@@ -16,6 +16,12 @@ interface Post {
   from_name?: string,
 }
 
+interface SearchConfig {
+  q: string,
+  st: string,
+  et: string,
+}
+
 @Component({
   selector: 'app-hp',
   templateUrl: './hp.component.html',
@@ -46,6 +52,12 @@ export class HotPostComponent implements OnInit {
     FORUM: this.FORUM,
   }
   
+  search_config:SearchConfig = {
+    q: "",
+    st: "",
+    et: "",
+  }
+
   query:string = "";
   temp_query:string = "";
   resp_query:string = "";
@@ -84,17 +96,17 @@ export class HotPostComponent implements OnInit {
   }
 
 
-  async read_url(){
+  async read_url():Promise<any>{
 
     let urlstr:string = document.location.toString();
-    let params = new URL(urlstr).searchParams;
-    return params
+    let params:any = new URL(urlstr).searchParams;
+    return await params
   }
   
-  async fetch_data() {
+  async fetch_data():Promise<void> {
     this.resp_query = "";
 
-    let response = await fetch('http://localhost:3000/trendapi/api_analytics_hotpost');
+    let response = await fetch(`http://localhost:3000/trendapi/api_analytics_hotpost?q=${this.search_config.q}`);
 
     if (!response.ok) {
       throw new Error(`HTTP 錯誤 status: ${response.status}`);
@@ -152,14 +164,14 @@ export class HotPostComponent implements OnInit {
   }
   click_input_query(): void{
 
-    this.query = this.temp_query;
+    this.search_config.q = this.temp_query;
     this.fetch_data().then((resp)=>{
       this.resp_query = this.temp_query;
       this.convert_resp(resp);
       // processAjaxData(null, "AAAAA");
       let urlstr:string = document.location.toString();
       const url = new URL(urlstr);
-      url.searchParams.set('q', this.query);
+      url.searchParams.set('q', this.search_config.q);
       window.history.pushState({}, '', url);
     })
     .catch(e => {
@@ -171,17 +183,20 @@ export class HotPostComponent implements OnInit {
   ngOnInit(): void {
 
     this.read_url().then((params)=>{
+
       let st = params.get('st');
+      let et = params.get('et');
       let query = params.get('q');
-      console.log("query:", query);
+
+
       if(!query){
         console.log("Please input your query")
-        this.query = "";
+        this.search_config.q = "";
 
       } else {
-        this.query = query;
+        this.search_config.q = query;
         this.fetch_data().then((resp)=>{
-          this.resp_query = this.query;
+          this.resp_query = this.search_config.q;
           this.convert_resp(resp)
         })
         .catch(e => {
