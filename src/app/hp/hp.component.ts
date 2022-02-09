@@ -24,12 +24,15 @@ interface Post {
 
 export class HotPostComponent implements OnInit {
 
-  constructor() { }
+  constructor() { 
+
+  }
 
   pf: string = "FB";
   page: number = 1;
   page_arr: Array<number> = [];
-  post_open_arr: Array<number> = [0];
+  // post_open_arr: Array<number> = [0];
+  post_open_arr: Array<number> = [];
 
   FB:PF = {
     post_arr: []
@@ -43,6 +46,8 @@ export class HotPostComponent implements OnInit {
     FORUM: this.FORUM,
   }
   
+  query:string = "";
+  temp_query:string = "";
 
   toggle_post_open(post_idx: number):void{
     if (this.post_open_arr.includes(post_idx)){
@@ -77,73 +82,97 @@ export class HotPostComponent implements OnInit {
     // console.log(this.page_arr)
   }
 
-  ngOnInit(): void {
 
-    // console.log(window.location);
-    // SJC
+  async readURL(){
 
     let urlstr:string = document.location.toString();
     let params = new URL(urlstr).searchParams;
-    let st = params.get('st');
-    let query = params.get('q');
-    console.log(st,query);
+    return params
+  }
+  
+  async fetchData() {
+    let response = await fetch('http://localhost:3000/trendapi/api_analytics_hotpost');
 
-    async function myFetch() {
-      let response = await fetch('http://localhost:3000/trendapi/api_analytics_hotpost');
-
-      if (!response.ok) {
-        throw new Error(`HTTP 錯誤 status: ${response.status}`);
-      }
-      return await response.json()
+    if (!response.ok) {
+      throw new Error(`HTTP 錯誤 status: ${response.status}`);
     }
+    return await response.json()
+  }
 
-    myFetch()
-      .then((resp)=>{
-        console.log(resp)
-        let arr = [];
-        if ("forum_raw" in resp.data[0]) {
-          let raw = resp.data[0]["forum_raw"];
-          let temp_arr = [];
-          for (let i = 0; i < raw.length; i++) {
-            let item: Post = raw[i];
-            item.pf = "FORUM";
-            item.hash = i + 1;
-            item.from_name = item.board;
-
-            // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
-            // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
-            temp_arr.push(item);
+  convertResp(resp:any){
+    console.log(resp)
+          let arr = [];
+          if ("forum_raw" in resp.data[0]) {
+            let raw = resp.data[0]["forum_raw"];
+            let temp_arr = [];
+            for (let i = 0; i < raw.length; i++) {
+              let item: Post = raw[i];
+              item.pf = "FORUM";
+              item.hash = i + 1;
+              item.from_name = item.board;
+  
+              // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
+              // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
+              temp_arr.push(item);
+            }
+            arr = temp_arr;
+            // this.FORUM.post_arr = temp_arr.slice(0, 110);
+            this.FORUM.post_arr = temp_arr;
+            this.count_final_page();
+  
           }
-          arr = temp_arr;
-          // this.FORUM.post_arr = temp_arr.slice(0, 110);
-          this.FORUM.post_arr = temp_arr;
-          this.count_final_page();
-
-        }
-        if ("fb_raw" in resp.data[0]) {
-          let raw = resp.data[0]["fb_raw"];
-          let temp_arr = [];
-          for (let i = 0; i < raw.length; i++) {
-            let item = raw[i];
-            item.pf = "FB";
-            item.hash = i + 1;
-            // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
-            // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
-            item.content = item.text;
-            temp_arr.push(item);
+          if ("fb_raw" in resp.data[0]) {
+            let raw = resp.data[0]["fb_raw"];
+            let temp_arr = [];
+            for (let i = 0; i < raw.length; i++) {
+              let item = raw[i];
+              item.pf = "FB";
+              item.hash = i + 1;
+              // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
+              // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
+              item.content = item.text;
+              temp_arr.push(item);
+            }
+            arr = temp_arr;
+            this.FB.post_arr = temp_arr.slice(0,99);
+            this.count_final_page();
+  
           }
-          arr = temp_arr;
-          this.FB.post_arr = temp_arr.slice(0,99);
-          this.count_final_page();
+          console.log(this)
+  }
 
-        }
-        console.log(this)
-      })
-      .catch(e => {
-        console.log('錯誤描述: ' + e.message);
-      });
+  click_input_query(): void{
 
+    this.query = this.temp_query;
+    this.fetchData().then((resp)=>{
+      this.convertResp(resp)
+    })
+    .catch(e => {
+      console.log('錯誤! 描述: ' + e.message);
+    }); 
+  
+  }
 
+  ngOnInit(): void {
+
+    this.readURL().then((params)=>{
+      let st = params.get('st');
+      let query = params.get('q');
+      console.log("query:", query);
+      if(!query){
+        console.log("Please input your query")
+        this.query = "";
+
+      } else {
+        this.query = query;
+        this.fetchData().then((resp)=>{
+          this.convertResp(resp)
+        })
+        .catch(e => {
+          console.log('錯誤! 描述: ' + e.message);
+        }); 
+      }  
+    })
   }
 
 }
