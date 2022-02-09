@@ -48,6 +48,7 @@ export class HotPostComponent implements OnInit {
   
   query:string = "";
   temp_query:string = "";
+  resp_query:string = "";
 
   toggle_post_open(post_idx: number):void{
     if (this.post_open_arr.includes(post_idx)){
@@ -83,14 +84,16 @@ export class HotPostComponent implements OnInit {
   }
 
 
-  async readURL(){
+  async read_url(){
 
     let urlstr:string = document.location.toString();
     let params = new URL(urlstr).searchParams;
     return params
   }
   
-  async fetchData() {
+  async fetch_data() {
+    this.resp_query = "";
+
     let response = await fetch('http://localhost:3000/trendapi/api_analytics_hotpost');
 
     if (!response.ok) {
@@ -99,8 +102,8 @@ export class HotPostComponent implements OnInit {
     return await response.json()
   }
 
-  convertResp(resp:any){
-    console.log(resp)
+  convert_resp(resp:any){
+    // console.log(resp)
           let arr = [];
           if ("forum_raw" in resp.data[0]) {
             let raw = resp.data[0]["forum_raw"];
@@ -138,14 +141,26 @@ export class HotPostComponent implements OnInit {
             this.count_final_page();
   
           }
-          console.log(this)
+          // console.log(this)
   }
+  enter_input_query(event:any): void{
 
+    if(event.keyCode === 13){
+      // console.log("13");
+      this.click_input_query();
+    }
+  }
   click_input_query(): void{
 
     this.query = this.temp_query;
-    this.fetchData().then((resp)=>{
-      this.convertResp(resp)
+    this.fetch_data().then((resp)=>{
+      this.resp_query = this.temp_query;
+      this.convert_resp(resp);
+      // processAjaxData(null, "AAAAA");
+      let urlstr:string = document.location.toString();
+      const url = new URL(urlstr);
+      url.searchParams.set('q', this.query);
+      window.history.pushState({}, '', url);
     })
     .catch(e => {
       console.log('錯誤! 描述: ' + e.message);
@@ -155,7 +170,7 @@ export class HotPostComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.readURL().then((params)=>{
+    this.read_url().then((params)=>{
       let st = params.get('st');
       let query = params.get('q');
       console.log("query:", query);
@@ -165,8 +180,9 @@ export class HotPostComponent implements OnInit {
 
       } else {
         this.query = query;
-        this.fetchData().then((resp)=>{
-          this.convertResp(resp)
+        this.fetch_data().then((resp)=>{
+          this.resp_query = this.query;
+          this.convert_resp(resp)
         })
         .catch(e => {
           console.log('錯誤! 描述: ' + e.message);

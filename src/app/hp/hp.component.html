@@ -3,15 +3,15 @@
 <ng-container >
   <div>
     <h2>請輸入關鍵字:</h2>
-    <input type="text" [(ngModel)]="temp_query" #ctrl="ngModel" required>
+    <input type="text" [(ngModel)]="temp_query" (keydown)="enter_input_query($event)" #ctrl="ngModel" required>
     <button class="border-2 p-2" (click)="click_input_query()">Search</button>
-    <p>temp:{{temp_query}}</p>
-    <p>real:{{query}}</p>
+    <p>temp_query:{{temp_query}}</p>
+    <p>resp_query:{{resp_query}}</p>
   </div>
 </ng-container>
 
 
-<ng-container *ngIf="query !== ''">
+<ng-container *ngIf="resp_query !== ''">
   <div class="pf-btn-container flex justify-between">
     <div class="container-left">
       <button class="py-1 px-3" (click)="pf = item; page = 1; count_final_page(); post_open_arr = [];" *ngFor="let item of ['FB','FORUM']" [ngClass]="{active: pf === item}">{{item}}</button>
