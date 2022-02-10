@@ -1,0 +1,52 @@
+<h1>Hot Post Material</h1>
+
+<ng-container>
+    <div>
+        <h2>請輸入關鍵字:</h2>
+        <input type="text" [(ngModel)]="temp_query" (keydown)="enter_input_query($event)" #ctrl="ngModel" required>
+        <button class="border-2 p-2" (click)="click_input_query()">Search</button>
+        <p>temp_query:{{temp_query}}</p>
+        <p>resp_query:{{resp_query}}</p>
+    </div>
+</ng-container>
+
+
+
+<ng-container *ngIf="resp_query !== ''">
+
+    <table mat-table [dataSource]="HP['FB'].post_arr" class="mat-elevation-z8" multiTemplateDataRows>
+
+        <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+            <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+            <td mat-cell *matCellDef="let element"> 
+                <div class="max-h-4 overflow-hidden">{{element[column]}}</div> 
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+                <div class="example-element-detail"
+                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                    <div class="example-element-diagram">
+                        <div class="example-element-position"> {{element.hash}} </div>
+                        <div class="example-element-name"> {{element.from_name}} </div>
+                    </div>
+                    <div class="example-element-description">
+                        {{element.content}}
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row max-h-5"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    </table>
+
+
+</ng-container>

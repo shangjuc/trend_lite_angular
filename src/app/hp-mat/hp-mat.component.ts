@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 interface Panel {
   [pf:string]: PF,
@@ -23,16 +24,23 @@ interface SearchConfig {
 }
 
 @Component({
-  selector: 'app-hp',
-  templateUrl: './hp.component.html',
-  styleUrls: ['./hp.component.scss']
+  selector: 'app-hp-mat',
+  templateUrl: './hp-mat.component.html',
+  styleUrls: ['./hp-mat.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 
-export class HotPostComponent implements OnInit {
+export class HpMatComponent implements OnInit {
 
-  constructor() { 
 
-  }
+  columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
+  expandedElement: Post | null = null;
 
   pf: string = "FB";
   page: number = 1;
@@ -58,7 +66,6 @@ export class HotPostComponent implements OnInit {
     et: "",
   }
 
-  displayedColumns: string[] = ['hash', 'from_name', 'content'];
 
   query:string = "";
   temp_query:string = "";
@@ -207,5 +214,6 @@ export class HotPostComponent implements OnInit {
       }  
     })
   }
+
 
 }
