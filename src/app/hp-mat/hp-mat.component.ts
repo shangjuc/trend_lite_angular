@@ -43,6 +43,11 @@ const ELEMENT_DATA: Post[] = [
   { pf: "", hash: 1, content: '' },
 ];
 
+interface Translation {
+  [key: string]: string
+}
+
+
 @Component({
   selector: 'app-hp-mat',
   templateUrl: './hp-mat.component.html',
@@ -60,6 +65,13 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource<Post>(ELEMENT_DATA);
   columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
+
+  trans_column: Translation = {
+    'hash': 'No.',
+    'from_name': '來源',
+    'content': '內容'
+  }
+  
   expandedElement: Post | null = null;
   expandedElementArr: Post[] = [];
 
@@ -105,7 +117,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     })
   }
 
-
+  expand_all: boolean = false;
 
   pf: string = "FB";
   page: number = 1;
@@ -222,6 +234,13 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     this.totalCount = arr.length;
     this.dataSource.paginator = this.paginator;
     // console.log(this)
+  }
+
+  click_pf(pf:string){
+    let arr = this.HP[pf].post_arr;
+    this.dataSource = new MatTableDataSource<Post>(arr);
+    this.totalCount = arr.length;
+    this.dataSource.paginator = this.paginator;
   }
   enter_input_query(event: any): void {
 
