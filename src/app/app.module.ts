@@ -10,6 +10,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
 import { HpMatComponent } from './hp-mat/hp-mat.component';
 
 
@@ -27,6 +28,7 @@ import { HpMatComponent } from './hp-mat/hp-mat.component';
     FormsModule,
     BrowserAnimationsModule,
     MatTableModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

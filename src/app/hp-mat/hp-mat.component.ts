@@ -1,15 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+
+import { animate, state, style, transition, trigger } from '@angular/animations';
+
 
 interface Panel {
-  [pf:string]: PF,
+  [pf: string]: PF,
 }
 
 interface PF {
-  post_arr: Array<Post>
+  // post_arr: Array<Post>
+  post_arr: Post[]
 }
 
-interface Post {
+export interface Post {
   pf: string,
   hash: number,
   content: string,
@@ -17,11 +23,25 @@ interface Post {
   from_name?: string,
 }
 
+
 interface SearchConfig {
   q: string,
   st: string,
   et: string,
 }
+
+const ELEMENT_DATA: Post[] = [
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+  { pf: "", hash: 1, content: '' },
+];
 
 @Component({
   selector: 'app-hp-mat',
@@ -29,73 +49,107 @@ interface SearchConfig {
   styleUrls: ['./hp-mat.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
 
-export class HpMatComponent implements OnInit {
+export class HpMatComponent implements OnInit, AfterViewInit {
 
-
+  dataSource = new MatTableDataSource<Post>(ELEMENT_DATA);
   columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
   expandedElement: Post | null = null;
+  expandedElementArr: Post[] = [];
+
+  @ViewChild(MatPaginator) 
+  paginator!: MatPaginator;
+
+  constructor() {
+    this.dataSource = new MatTableDataSource<Post>(ELEMENT_DATA);
+  }
+
+
+
+
+  ngAfterViewInit() {
+    // this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnInit(): void {
+
+    this.read_url().then((params) => {
+
+      let st = params.get('st');
+      let et = params.get('et');
+      let query = params.get('q');
+
+
+      if (!query) {
+        console.log("Please input your query")
+        this.search_config.q = "";
+
+      } else {
+        this.search_config.q = query;
+        this.fetch_data().then((resp) => {
+          this.resp_query = this.search_config.q;
+          this.convert_resp(resp)
+        })
+          .catch(e => {
+            console.log('錯誤! 描述: ' + e.message);
+          });
+      }
+      this.dataSource.paginator = this.paginator;
+
+    })
+  }
+
+
 
   pf: string = "FB";
   page: number = 1;
   page_arr: Array<number> = [];
-  // post_open_arr: Array<number> = [0];
-  post_open_arr: Array<number> = [];
 
-  FB:PF = {
+  FB: PF = {
     post_arr: []
   };
-  FORUM:PF = {
+  FORUM: PF = {
     post_arr: []
   }
 
-  HP:Panel = {
+  HP: Panel = {
     FB: this.FB,
     FORUM: this.FORUM,
   }
-  
-  search_config:SearchConfig = {
+
+  search_config: SearchConfig = {
     q: "",
     st: "",
     et: "",
   }
 
 
-  query:string = "";
-  temp_query:string = "";
-  resp_query:string = "";
+  query: string = "";
+  temp_query: string = "";
+  resp_query: string = "";
 
-  toggle_post_open(post_idx: number):void{
-    if (this.post_open_arr.includes(post_idx)){
-      this.post_open_arr.splice(this.post_open_arr.indexOf(post_idx), 1);
-    }else{
-      this.post_open_arr.push(post_idx);
+  toggle_post_open_mat(post: Post): void {
+    if (this.expandedElementArr.includes(post)) {
+      this.expandedElementArr.splice(this.expandedElementArr.indexOf(post), 1);
+    } else {
+      this.expandedElementArr.push(post);
     }
-    console.log(this.post_open_arr)
+    console.log(this.expandedElementArr)
   }
 
-  toggle_post_open_all(tf:boolean):void{
-    this.post_open_arr = [];
-    if(tf){
-      for(let i = (this.page - 1) * 10; i < this.page * 10; i++){
-        this.post_open_arr.push(i)
-      }
-    }
-    console.log(this.post_open_arr)
-  }
 
-  count_final_page():void{
+  count_final_page(): void {
     this.page_arr = [];
     let p_length = 0;
-    if(this.pf === "FB"){
+    if (this.pf === "FB") {
       p_length = Math.ceil(this.FB.post_arr.length / 10) + 1;
-    } else if(this.pf === "FORUM"){
+    } else if (this.pf === "FORUM") {
       p_length = Math.ceil(this.FORUM.post_arr.length / 10) + 1;
     }
     for (let i = 1; i < p_length; i++) {
@@ -105,14 +159,14 @@ export class HpMatComponent implements OnInit {
   }
 
 
-  async read_url():Promise<any>{
+  async read_url(): Promise<any> {
 
-    let urlstr:string = document.location.toString();
-    let params:any = new URL(urlstr).searchParams;
+    let urlstr: string = document.location.toString();
+    let params: any = new URL(urlstr).searchParams;
     return await params
   }
-  
-  async fetch_data():Promise<void> {
+
+  async fetch_data(): Promise<void> {
     this.resp_query = "";
 
     let response = await fetch(`http://localhost:3000/trendapi/api_analytics_hotpost?q=${this.search_config.q}`);
@@ -123,97 +177,77 @@ export class HpMatComponent implements OnInit {
     return await response.json()
   }
 
-  convert_resp(resp:any){
+  totalCount: number = 0;
+  convert_resp(resp: any) {
     // console.log(resp)
-          let arr = [];
-          if ("forum_raw" in resp.data[0]) {
-            let raw = resp.data[0]["forum_raw"];
-            let temp_arr = [];
-            for (let i = 0; i < raw.length; i++) {
-              let item: Post = raw[i];
-              item.pf = "FORUM";
-              item.hash = i + 1;
-              item.from_name = item.board;
-  
-              // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
-              // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
-              temp_arr.push(item);
-            }
-            arr = temp_arr;
-            // this.FORUM.post_arr = temp_arr.slice(0, 110);
-            this.FORUM.post_arr = temp_arr;
-            this.count_final_page();
-  
-          }
-          if ("fb_raw" in resp.data[0]) {
-            let raw = resp.data[0]["fb_raw"];
-            let temp_arr = [];
-            for (let i = 0; i < raw.length; i++) {
-              let item = raw[i];
-              item.pf = "FB";
-              item.hash = i + 1;
-              // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
-              // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
-              item.content = item.text;
-              temp_arr.push(item);
-            }
-            arr = temp_arr;
-            this.FB.post_arr = temp_arr.slice(0,99);
-            this.count_final_page();
-  
-          }
-          // console.log(this)
-  }
-  enter_input_query(event:any): void{
+    let arr = [];
+    
+    if ("forum_raw" in resp.data[0]) {
+      let raw = resp.data[0]["forum_raw"];
+      let temp_arr = [];
+      for (let i = 0; i < raw.length; i++) {
+        let item: Post = raw[i];
+        item.pf = "FORUM";
+        item.hash = i + 1;
+        item.from_name = item.board;
 
-    if(event.keyCode === 13){
+        // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
+        // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
+        temp_arr.push(item);
+      }
+      arr = temp_arr;
+      // this.FORUM.post_arr = temp_arr.slice(0, 110);
+      this.FORUM.post_arr = temp_arr;
+      this.count_final_page();
+
+    }
+    if ("fb_raw" in resp.data[0]) {
+      let raw = resp.data[0]["fb_raw"];
+      let temp_arr = [];
+      for (let i = 0; i < raw.length; i++) {
+        let item = raw[i];
+        item.pf = "FB";
+        item.hash = i + 1;
+        // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
+        // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
+        item.content = item.text;
+        temp_arr.push(item);
+      }
+      arr = temp_arr;
+      this.FB.post_arr = temp_arr.slice(0, 99);
+      this.count_final_page();
+      
+    }
+    this.dataSource = new MatTableDataSource<Post>(arr);
+    this.totalCount = arr.length;
+    this.dataSource.paginator = this.paginator;
+    // console.log(this)
+  }
+  enter_input_query(event: any): void {
+
+    if (event.keyCode === 13) {
       // console.log("13");
       this.click_input_query();
     }
   }
-  click_input_query(): void{
+  click_input_query(): void {
 
     this.search_config.q = this.temp_query;
-    this.fetch_data().then((resp)=>{
+    this.fetch_data().then((resp) => {
       this.resp_query = this.temp_query;
       this.convert_resp(resp);
       // processAjaxData(null, "AAAAA");
-      let urlstr:string = document.location.toString();
+      let urlstr: string = document.location.toString();
       const url = new URL(urlstr);
       url.searchParams.set('q', this.search_config.q);
       window.history.pushState({}, '', url);
     })
-    .catch(e => {
-      console.log('錯誤! 描述: ' + e.message);
-    }); 
-  
+      .catch(e => {
+        console.log('錯誤! 描述: ' + e.message);
+      });
+
   }
 
-  ngOnInit(): void {
-
-    this.read_url().then((params)=>{
-
-      let st = params.get('st');
-      let et = params.get('et');
-      let query = params.get('q');
-
-
-      if(!query){
-        console.log("Please input your query")
-        this.search_config.q = "";
-
-      } else {
-        this.search_config.q = query;
-        this.fetch_data().then((resp)=>{
-          this.resp_query = this.search_config.q;
-          this.convert_resp(resp)
-        })
-        .catch(e => {
-          console.log('錯誤! 描述: ' + e.message);
-        }); 
-      }  
-    })
-  }
 
 
 }

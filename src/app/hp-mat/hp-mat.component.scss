@@ -49,3 +49,12 @@ h1{
   .example-element-description-attribution {
     opacity: 0.5;
   }
+
+  mat-paginator {
+      box-shadow: 0px 5px 10px #aaa;
+    // box-shadow: 
+    // inset -8px 0px 6px -6px #888,
+    // inset 0px -8px 6px -6px #888,
+    // inset 8px 0px 6px -6px #888
+    // ;
+  }
