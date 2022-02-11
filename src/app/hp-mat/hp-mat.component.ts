@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { translation_zhtw, SearchConfig, Panel, PF, Post } from '../app.component';
+import { translation_zhtw, SearchConfig, Panel, PF, Post, search_config } from '../app.component';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -30,7 +30,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Post>(ELEMENT_DATA);
   columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
   translation_zhtw = translation_zhtw;
-
+  search_config = search_config;
 
   expandedElement: Post | null = null;
   expandedElementArr: Post[] = [];
@@ -38,13 +38,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  constructor() {
-    this.dataSource = new MatTableDataSource<Post>(ELEMENT_DATA);
-    this.translation_zhtw = translation_zhtw;
-  }
-
-
-
+  constructor() { }
 
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
@@ -54,24 +48,21 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
     this.read_url().then((params) => {
 
-      let st = params.get('st');
-      let et = params.get('et');
-      let query = params.get('q');
+
+      if(this.search_config.pf !== ""){
+        this.pf = this.search_config.pf;
+      }
 
 
-      if (!query) {
-        console.log("Please input your query")
-        this.search_config.q = "";
-
-      } else {
-        this.search_config.q = query;
+      if (this.search_config.q !== "") {
         this.fetch_data().then((resp) => {
+          this.temp_query = this.search_config.q;
           this.resp_query = this.search_config.q;
           this.convert_resp(resp)
         })
-          .catch(e => {
-            console.log('錯誤! 描述: ' + e.message);
-          });
+        .catch(e => {
+          console.log('錯誤! 描述: ' + e.message);
+        });
       }
       this.dataSource.paginator = this.paginator;
 
@@ -92,7 +83,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   };
   FORUM: PF = {
     post_arr: [],
-    displayed_columns: ['push'],
+    displayed_columns: ['push', 'boo_count', 'dif_count'],
     max_of_columns: {},
     color_of_columns: {},
   }
@@ -102,11 +93,6 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     FORUM: this.FORUM,
   }
 
-  search_config: SearchConfig = {
-    q: "",
-    st: "",
-    et: "",
-  }
 
 
   query: string = "";
@@ -121,7 +107,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     } else {
       this.expandedElementArr.push(post);
     }
-    console.log(this.expandedElementArr)
+    // console.log(this.expandedElementArr)
   }
 
 
@@ -130,6 +116,11 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
     let urlstr: string = document.location.toString();
     let params: any = new URL(urlstr).searchParams;
+    this.search_config.q = params.get('q') || "";
+    this.search_config.st = params.get('st') || "";
+    this.search_config.et = params.get('et') || "";
+    this.search_config.pf = params.get('pf') || "";
+    this.search_config.pfs = params.get('pfs') || "";
     return await params
   }
 
@@ -192,7 +183,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
         }
         this.HP[temp_pf].post_arr = temp_arr;
-        this.pf = temp_pf;
+        // this.pf = temp_pf;
       }
     })
 
@@ -220,7 +211,8 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   }
 
   click_pf(pf:string){
-    this.reset_table_data(pf)
+    this.reset_table_data(pf);
+    this.set_url_pf(pf);
   }
   enter_input_query(event: any): void {
 
@@ -230,21 +222,29 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     }
   }
   click_input_query(): void {
-
     this.search_config.q = this.temp_query;
     this.fetch_data().then((resp) => {
       this.resp_query = this.temp_query;
       this.convert_resp(resp);
+      this.set_url_q(this.search_config.q);
       // processAjaxData(null, "AAAAA");
-      let urlstr: string = document.location.toString();
-      const url = new URL(urlstr);
-      url.searchParams.set('q', this.search_config.q);
-      window.history.pushState({}, '', url);
     })
       .catch(e => {
         console.log('錯誤! 描述: ' + e.message);
       });
+  }
 
+  set_url_q(q:string):void{
+    let urlstr: string = document.location.toString();
+    const url = new URL(urlstr);
+    url.searchParams.set('q', q);
+    window.history.pushState({}, '', url);
+  }
+  set_url_pf(pf:string):void{
+    let urlstr: string = document.location.toString();
+    const url = new URL(urlstr);
+    url.searchParams.set('pf', pf);
+    window.history.pushState({}, '', url);
   }
 
 
