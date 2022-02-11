@@ -8,8 +8,8 @@
   </div>
   <div>
     <h2>以下為關鍵字 {{resp_query}} 的搜尋結果</h2>
-    <button class="px-2 py-1 border-2" (click)="click_pf('FB')">FB</button>
-    <button class="px-2 py-1 mr-1 border-2" (click)="click_pf('FORUM')">FORUM</button>
+    <button class="px-2 py-1 border-2" (click)="click_pf('FB')" [ngClass]="{'bg-slate-300': pf==='FB'}">FB</button>
+    <button class="px-2 py-1 mr-1 border-2" (click)="click_pf('FORUM')" [ngClass]="{'bg-slate-300': pf==='FORUM'}">FORUM</button>
     <button class="px-2 py-1 mx-1 border-2" (click)="expand_all = true" [ngClass]="{hidden: expand_all}">全部展開</button>
     <button class="px-2 py-1 mx-1 border-2" (click)="expand_all = false; expandedElementArr = []"
       [ngClass]="{hidden: !expand_all}">全部收合</button>

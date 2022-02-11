@@ -211,6 +211,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   }
 
   click_pf(pf:string){
+    this.pf = pf;
     this.reset_table_data(pf);
     this.set_url_pf(pf);
   }
