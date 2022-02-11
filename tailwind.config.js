@@ -3,7 +3,7 @@ module.exports = {
   purge: {
     content: [
       './src/**/*.{html,ts}',
-    ]
+    ],
   },
   important: '#app',
   darkMode: 'class',

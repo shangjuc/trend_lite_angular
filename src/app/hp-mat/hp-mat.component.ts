@@ -148,7 +148,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
   convert_resp(resp: any) {
     // console.log(resp)
-    let self = this;
+
     let pf_arr = [
       ['FORUM', 'forum_raw'],
       ['FB', 'fb_raw'],
@@ -159,9 +159,9 @@ export class HpMatComponent implements OnInit, AfterViewInit {
         let raw = resp.data[0][pf_item[1]];
         let temp_arr = [];
         let temp_pf = pf_item[0];
-        for (let i = 0; i < self.HP[temp_pf].displayed_columns.length; i++) {
-          self.HP[temp_pf].max_of_columns[self.HP[temp_pf].displayed_columns[i]] = 0;
-          self.HP[temp_pf].color_of_columns[self.HP[temp_pf].displayed_columns[i]] = self.temp_colors[i];
+        for (let i = 0; i < this.HP[temp_pf].displayed_columns.length; i++) {
+          this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[i]] = 0;
+          this.HP[temp_pf].color_of_columns[this.HP[temp_pf].displayed_columns[i]] = this.temp_colors[i];
         }
         for (let i = 0; i < raw.length; i++) {
           let item = raw[i];
@@ -177,9 +177,19 @@ export class HpMatComponent implements OnInit, AfterViewInit {
           // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
           item.engagement_score = Math.floor(item.engagement_score * 10) / 10;
           temp_arr.push(item);
-          for (let i = 0; i < this.HP[temp_pf].displayed_columns.length; i++) {
-            this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[i]] = Math.max(this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[i]], item[this.HP[temp_pf].displayed_columns[i]]);
+          item.colors = {};
+          item.maxs = {};
+          for (let j = 0; j < this.HP[temp_pf].displayed_columns.length; j++) {
+            this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[j]] = Math.max(this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[j]], item[this.HP[temp_pf].displayed_columns[j]]);
           }
+        }
+        for (let i = 0; i < raw.length; i++) {
+          let item = raw[i];
+          for (let j = 0; j < this.HP[temp_pf].displayed_columns.length; j++) {
+            item.colors[this.HP[temp_pf].displayed_columns[j]] = this.HP[temp_pf].color_of_columns[this.HP[temp_pf].displayed_columns[j]]
+            item.maxs[this.HP[temp_pf].displayed_columns[j]] = this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[j]]
+          }
+
         }
         this.HP[temp_pf].post_arr = temp_arr;
         this.pf = temp_pf;
@@ -190,6 +200,17 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     console.log(this)
   }
 
+  set_bg_color(element:any, column:string, pf:string){
+    // console.log(element,column,pf)
+
+    let bg_color = "#FFF";
+    if (element.colors[column]){
+      bg_color = `rgba(${element.colors[column]} ${element[column] / element.maxs[column]})`;
+    }
+    // console.log(bg_color)
+    return bg_color;
+
+  }
   reset_table_data(pf: string){
     let arr = this.HP[pf].post_arr;
     this.dataSource = new MatTableDataSource<Post>(arr);

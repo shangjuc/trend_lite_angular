@@ -24,9 +24,10 @@
 
         <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
             <th mat-header-cell *matHeaderCellDef [ngClass]="column"> {{translation_zhtw[column] }} </th>
-            <td mat-cell *matCellDef="let element" [ngClass]="column"
-            [ngStyle]="{'background-color': 'rgba(' + HP[pf].color_of_columns[column] + element[column]/HP[pf].max_of_columns[column] +')'}">
-                <div class="max-h-4 overflow-hidden" >{{column === 'content'? HP[pf].color_of_columns[column] + element[column] : element[column]}}</div>
+            <td mat-cell *matCellDef="let element"
+            [ngClass]="column"
+            [ngStyle]="{'background-color': set_bg_color(element, column, pf)}">
+                <div class="max-h-4 overflow-hidden" >{{ element[column] }}</div>
             </td>
         </ng-container>
         <ng-container matColumnDef="expandedDetail">
