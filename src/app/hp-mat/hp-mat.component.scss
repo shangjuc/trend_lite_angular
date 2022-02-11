@@ -1,85 +1,96 @@
-h1{
-    color: #1b9aac;
+h1 {
+  color: #1b9aac;
+}
+
+table {
+  width: 100%;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+
+.mat-header-cell,
+.mat-cell {
+  width: 80px;
+  text-align: right;
+  @apply px-2;
+
+  &.hash {
+    text-align: left;
+  }
+  &.from_name {
+    width: 150px;
+    text-align: left;
+
+    div {
+      overflow: auto;
+      max-height: none !important;
+    }
+  }
+  &.content {
+    width: auto;
+    text-align: left;
+    div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+    }
   }
 
-  table {
-    width: 100%;
+  &:first-child{
+    @apply pl-4;
   }
-  
-  tr.example-detail-row {
-    height: 0;
+  &:last-child{
+    @apply pr-4;
   }
-  
-  tr.example-element-row:not(.example-expanded-row):hover {
-    background: whitesmoke;
-  }
-  
-  tr.example-element-row:not(.example-expanded-row):active {
-    background: #efefef;
-  }
-  
-  .example-element-row td {
-    border-bottom-width: 0;
-  }
-  
-  .example-element-detail {
-    overflow: hidden;
-    display: flex;
-  }
-  
-  .example-element-diagram {
-    min-width: 80px;
-    border: 2px solid black;
-    padding: 8px;
-    font-weight: lighter;
-    margin: 8px 0;
-    height: 104px;
-  }
-  
-  .example-element-symbol {
-    font-weight: bold;
-    font-size: 40px;
-    line-height: normal;
-  }
-  
-  .example-element-description {
-    padding: 16px;
-  }
-  
-  .example-element-description-attribution {
-    opacity: 0.5;
-  }
+}
 
-  .mat-cell {
-      div {
-
-      }
-      &.hash{
-        text-align: center;
-      }
-      &.from_name{
-          width: 150px;
-
-          div{
-            overflow: auto;
-            max-height: none !important;
-          }
-      }
-      &.content {
-          div {
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: normal;
-          }
-      }
-  }
-
-
-  mat-paginator {
-      box-shadow: 0px 5px 10px #aaa;
-    // box-shadow: 
-    // inset -8px 0px 6px -6px #888,
-    // inset 0px -8px 6px -6px #888,
-    // inset 8px 0px 6px -6px #888
-    // ;
-  }
+mat-paginator {
+  box-shadow: 0px 5px 10px #aaa;
+  // box-shadow:
+  // inset -8px 0px 6px -6px #888,
+  // inset 0px -8px 6px -6px #888,
+  // inset 8px 0px 6px -6px #888
+  // ;
+}

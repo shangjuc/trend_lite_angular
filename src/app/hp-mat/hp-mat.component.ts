@@ -2,50 +2,14 @@ import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { translation_zhtw, SearchConfig, Panel, PF, Post } from '../app.component';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 
-interface Panel {
-  [pf: string]: PF,
-}
-
-interface PF {
-  // post_arr: Array<Post>
-  post_arr: Post[]
-}
-
-export interface Post {
-  pf: string,
-  hash: number,
-  content: string,
-  board?: string,
-  from_name?: string,
-}
-
-
-interface SearchConfig {
-  q: string,
-  st: string,
-  et: string,
-}
-
 const ELEMENT_DATA: Post[] = [
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
-  { pf: "", hash: 1, content: '' },
+  { pf: "FB", hash: 1, content: 'AAAAA' },
 ];
-
-interface Translation {
-  [key: string]: string
-}
 
 
 @Component({
@@ -65,21 +29,18 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource<Post>(ELEMENT_DATA);
   columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
+  translation_zhtw = translation_zhtw;
 
-  trans_column: Translation = {
-    'hash': 'No.',
-    'from_name': '來源',
-    'content': '內容'
-  }
-  
+
   expandedElement: Post | null = null;
   expandedElementArr: Post[] = [];
 
-  @ViewChild(MatPaginator) 
+  @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
   constructor() {
     this.dataSource = new MatTableDataSource<Post>(ELEMENT_DATA);
+    this.translation_zhtw = translation_zhtw;
   }
 
 
@@ -124,10 +85,16 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   page_arr: Array<number> = [];
 
   FB: PF = {
-    post_arr: []
+    post_arr: [],
+    displayed_columns: ['reaction_all', 'comment_count', 'share_count', 'engagement_score'],
+    max_of_columns: {},
+    color_of_columns: {},
   };
   FORUM: PF = {
-    post_arr: []
+    post_arr: [],
+    displayed_columns: ['push'],
+    max_of_columns: {},
+    color_of_columns: {},
   }
 
   HP: Panel = {
@@ -146,6 +113,8 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   temp_query: string = "";
   resp_query: string = "";
 
+  totalCount: number = 0;
+
   toggle_post_open_mat(post: Post): void {
     if (this.expandedElementArr.includes(post)) {
       this.expandedElementArr.splice(this.expandedElementArr.indexOf(post), 1);
@@ -155,20 +124,6 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     console.log(this.expandedElementArr)
   }
 
-
-  count_final_page(): void {
-    this.page_arr = [];
-    let p_length = 0;
-    if (this.pf === "FB") {
-      p_length = Math.ceil(this.FB.post_arr.length / 10) + 1;
-    } else if (this.pf === "FORUM") {
-      p_length = Math.ceil(this.FORUM.post_arr.length / 10) + 1;
-    }
-    for (let i = 1; i < p_length; i++) {
-      this.page_arr.push(i);
-    }
-    // console.log(this.page_arr)
-  }
 
 
   async read_url(): Promise<any> {
@@ -189,58 +144,62 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     return await response.json()
   }
 
-  totalCount: number = 0;
+  temp_colors: string[] = ['255, 59, 17,', '125, 206, 160,', '133, 193, 233,', '165, 105, 189,']
+
   convert_resp(resp: any) {
     // console.log(resp)
-    let arr = [];
-    
-    if ("forum_raw" in resp.data[0]) {
-      let raw = resp.data[0]["forum_raw"];
-      let temp_arr = [];
-      for (let i = 0; i < raw.length; i++) {
-        let item: Post = raw[i];
-        item.pf = "FORUM";
-        item.hash = i + 1;
-        item.from_name = item.board;
+    let self = this;
+    let pf_arr = [
+      ['FORUM', 'forum_raw'],
+      ['FB', 'fb_raw'],
+    ];
 
-        // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
-        // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
-        temp_arr.push(item);
+    pf_arr.forEach((pf_item)=>{
+      if (pf_item[1] in resp.data[0]) {
+        let raw = resp.data[0][pf_item[1]];
+        let temp_arr = [];
+        let temp_pf = pf_item[0];
+        for (let i = 0; i < self.HP[temp_pf].displayed_columns.length; i++) {
+          self.HP[temp_pf].max_of_columns[self.HP[temp_pf].displayed_columns[i]] = 0;
+          self.HP[temp_pf].color_of_columns[self.HP[temp_pf].displayed_columns[i]] = self.temp_colors[i];
+        }
+        for (let i = 0; i < raw.length; i++) {
+          let item = raw[i];
+          item.pf = temp_pf;
+          item.hash = i + 1;
+          if (temp_pf === "FORUM") {
+            item.from_name = item.board;
+          }
+          if (temp_pf === "FB"){
+            item.content = item.text;
+          }
+          // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
+          // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
+          item.engagement_score = Math.floor(item.engagement_score * 10) / 10;
+          temp_arr.push(item);
+          for (let i = 0; i < this.HP[temp_pf].displayed_columns.length; i++) {
+            this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[i]] = Math.max(this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[i]], item[this.HP[temp_pf].displayed_columns[i]]);
+          }
+        }
+        this.HP[temp_pf].post_arr = temp_arr;
+        this.pf = temp_pf;
       }
-      arr = temp_arr;
-      // this.FORUM.post_arr = temp_arr.slice(0, 110);
-      this.FORUM.post_arr = temp_arr;
-      this.count_final_page();
+    })
 
-    }
-    if ("fb_raw" in resp.data[0]) {
-      let raw = resp.data[0]["fb_raw"];
-      let temp_arr = [];
-      for (let i = 0; i < raw.length; i++) {
-        let item = raw[i];
-        item.pf = "FB";
-        item.hash = i + 1;
-        // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
-        // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
-        item.content = item.text;
-        temp_arr.push(item);
-      }
-      arr = temp_arr;
-      this.FB.post_arr = temp_arr.slice(0, 99);
-      this.count_final_page();
-      
-    }
-    this.dataSource = new MatTableDataSource<Post>(arr);
-    this.totalCount = arr.length;
-    this.dataSource.paginator = this.paginator;
-    // console.log(this)
+    this.reset_table_data(this.pf);
+    console.log(this)
   }
 
-  click_pf(pf:string){
+  reset_table_data(pf: string){
     let arr = this.HP[pf].post_arr;
     this.dataSource = new MatTableDataSource<Post>(arr);
     this.totalCount = arr.length;
     this.dataSource.paginator = this.paginator;
+    this.columnsToDisplay = ['hash', 'from_name', 'content',].concat(this.HP[pf].displayed_columns);
+  }
+
+  click_pf(pf:string){
+    this.reset_table_data(pf)
   }
   enter_input_query(event: any): void {
 

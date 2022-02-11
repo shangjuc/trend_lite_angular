@@ -19,11 +19,11 @@
     <div class="container-right">
       <button class="py-1 px-3" (click)="toggle_post_open_all(true)">Open all</button>
       <button class="py-1 px-3" (click)="toggle_post_open_all(false)">Close all</button>
-  
+
     </div>
   </div>
-  
-  
+
+
   <ng-container *ngFor="let pf_item of ['FB','FORUM']">
     <ul class="post-container" *ngIf="pf ===  pf_item">
       <ng-container *ngFor="let item of HP[pf_item].post_arr; let i=index">
@@ -40,14 +40,14 @@
             </div>
           </div>
         </ng-container>
-  
+
       </ng-container>
     </ul>
-  
+
   </ng-container>
-  
-  
-  
+
+
+
   <div class="page-btn-container flex justify-center">
     <button class="py-1 px-2 w-9" (click)="page = 1" [ngClass]="{active: page === 1}">1</button>
     <span class="py-1 px-2 w-9" *ngIf="page_arr.length > 10 && page > 4">...</span>
@@ -64,6 +64,6 @@
     <span class="py-1 px-2 w-9" *ngIf="page_arr.length > 10 && page < page_arr[page_arr.length-4]">...</span>
     <button class="py-1 px-2 w-9" (click)="page = page_arr[page_arr.length-1]" [ngClass]="{active: page === page_arr[page_arr.length-1]}">{{page_arr[page_arr.length-1]}}</button>
   </div>
-  
+
 </ng-container>
 
