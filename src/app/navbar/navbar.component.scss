@@ -1,5 +1,6 @@
 nav {
     @apply bg-slate-300 text-cyan-900 fixed w-full top-0;
+    z-index: 1000;
     ul {
         li {
             height: auto;

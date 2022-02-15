@@ -1,7 +1,7 @@
 <h1>Hot Post</h1>
 
 <ng-container >
-  <div>
+  <div *ngIf="false">
     <h2>請輸入關鍵字:</h2>
     <input type="text" [(ngModel)]="temp_query" (keydown)="enter_input_query($event)" #ctrl="ngModel" required>
     <button class="border-2 p-2" (click)="click_input_query()">Search</button>

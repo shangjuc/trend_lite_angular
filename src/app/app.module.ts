@@ -16,6 +16,8 @@ import { PlotlyViaCDNModule } from 'angular-plotly.js';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { HpMatComponent } from './hp-mat/hp-mat.component';
+import { McpComponent } from './mcp/mcp.component';
+import { SearchComponent } from './search/search.component';
 
 // PlotlyModule.plotlyjs = PlotlyJS;
 PlotlyViaCDNModule.setPlotlyVersion('latest');
@@ -28,6 +30,8 @@ PlotlyViaCDNModule.setPlotlyBundle('basic');
     LineChartComponent,
     NavbarComponent,
     HpMatComponent,
+    McpComponent,
+    SearchComponent,
   ],
   imports: [
     CommonModule,
