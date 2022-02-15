@@ -1,11 +1,7 @@
 <h1>Hot Post Material</h1>
 
 <ng-container>
-  <div *ngIf="false">
-    <h2>請輸入關鍵字:</h2>
-    <input type="text" [(ngModel)]="temp_query" (keydown)="enter_input_query($event)" #ctrl="ngModel" required>
-    <button class="border-2 p-2" (click)="click_input_query()">Search</button>
-  </div>
+  
   <div>
     <h2>以下為關鍵字 {{resp_query}} 的搜尋結果</h2>
     <button class="px-2 py-1 border-2" (click)="click_pf('FB')" [ngClass]="{'bg-slate-300': pf==='FB'}">FB</button>

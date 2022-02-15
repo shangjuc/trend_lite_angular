@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { translation_zhtw, SearchConfig, search_config } from '../app.component';
+import { search_config } from '../app.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -8,14 +9,20 @@ import { translation_zhtw, SearchConfig, search_config } from '../app.component'
 })
 export class SearchComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route:Router) {}
 
   ngOnInit(): void {
+    this.read_url().then((params) => {
+
+      if (this.search_config.q !== "") {
+        this.temp_query = this.search_config.q;        
+      }
+
+    })
   }
 
   query: string = "";
   temp_query: string = "";
-  resp_query: string = "";
   search_config = search_config;
 
 
@@ -29,7 +36,10 @@ export class SearchComponent implements OnInit {
   click_input_query(): void {
     this.search_config.q = this.temp_query;
     this.set_url_q(this.search_config.q);
-      
+    let navigationExtras = {
+      queryParams: this.search_config,
+    };
+    this.route.navigate(['/mcp'], navigationExtras );
   }
 
   set_url_q(q:string):void{

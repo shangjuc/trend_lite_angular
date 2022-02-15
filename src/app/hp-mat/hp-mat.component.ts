@@ -51,11 +51,11 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
       if (this.search_config.q !== "") {
         this.fetch_data().then((resp) => {
-          this.temp_query = this.search_config.q;
           this.resp_query = this.search_config.q;
           this.convert_resp(resp)
         })
         .catch(e => {
+          this.resp_query = this.search_config.q;
           console.log('錯誤! 描述: ' + e.message);
         });
       }
@@ -91,7 +91,6 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
 
   query: string = "";
-  temp_query: string = "";
   resp_query: string = "";
 
   totalCount: number = 0;
@@ -210,32 +209,9 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     this.reset_table_data(pf);
     this.set_url_pf(pf);
   }
-  enter_input_query(event: any): void {
+  
 
-    if (event.keyCode === 13) {
-      // console.log("13");
-      this.click_input_query();
-    }
-  }
-  click_input_query(): void {
-    this.search_config.q = this.temp_query;
-    this.fetch_data().then((resp) => {
-      this.resp_query = this.temp_query;
-      this.convert_resp(resp);
-      this.set_url_q(this.search_config.q);
-      // processAjaxData(null, "AAAAA");
-    })
-      .catch(e => {
-        console.log('錯誤! 描述: ' + e.message);
-      });
-  }
 
-  set_url_q(q:string):void{
-    let urlstr: string = document.location.toString();
-    const url = new URL(urlstr);
-    url.searchParams.set('q', q);
-    window.history.pushState({}, '', url);
-  }
   set_url_pf(pf:string):void{
     let urlstr: string = document.location.toString();
     const url = new URL(urlstr);

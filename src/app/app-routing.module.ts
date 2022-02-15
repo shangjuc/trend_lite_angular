@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'hotpost-mat', component: HpMatComponent },
   { path: 'linechart', component: LineChartComponent },
   { path: 'mcp', component: McpComponent },
+  { path: '**', component: SearchComponent }
 ];
 
 @NgModule({

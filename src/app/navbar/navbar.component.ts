@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { translation_zhtw, SearchConfig, Panel, PF, Post, search_config } from '../app.component';
+import { search_config } from '../app.component';
 
 
 @Component({
