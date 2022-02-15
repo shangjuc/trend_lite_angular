@@ -20,7 +20,8 @@
 
 <ng-container>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows *ngIf="resp_query !== ''">
+  <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows *ngIf="resp_query !== ''"> -->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows >
 
     <!-- th, td -->
     <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">

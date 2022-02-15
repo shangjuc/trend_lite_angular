@@ -7,11 +7,6 @@ import { translation_zhtw, SearchConfig, Panel, PF, Post, search_config } from '
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 
-const ELEMENT_DATA: Post[] = [
-  { pf: "FB", hash: 1, content: 'AAAAA' },
-];
-
-
 @Component({
   selector: 'app-hp-mat',
   templateUrl: './hp-mat.component.html',
@@ -27,7 +22,7 @@ const ELEMENT_DATA: Post[] = [
 
 export class HpMatComponent implements OnInit, AfterViewInit {
 
-  dataSource = new MatTableDataSource<Post>(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<Post>();
   columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
   translation_zhtw = translation_zhtw;
   search_config = search_config;

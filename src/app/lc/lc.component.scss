@@ -1,0 +1,12 @@
+.modebar-group{
+    display: flex !important;
+
+}
+
+plotly-plot{
+    background-color: red;
+  }
+  ::ng-deep .modebar-group{
+    display: flex !important;
+  
+  }

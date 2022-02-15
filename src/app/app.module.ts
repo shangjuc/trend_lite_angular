@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,11 +9,17 @@ import { HotPostComponent } from './hp/hp.component';
 import { LineChartComponent } from './lc/lc.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import * as PlotlyJS from 'plotly.js-dist-min';
+// import { PlotlyModule } from 'angular-plotly.js';
+import { PlotlyViaCDNModule } from 'angular-plotly.js';
 
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { HpMatComponent } from './hp-mat/hp-mat.component';
 
+// PlotlyModule.plotlyjs = PlotlyJS;
+PlotlyViaCDNModule.setPlotlyVersion('latest');
+PlotlyViaCDNModule.setPlotlyBundle('basic');
 
 @NgModule({
   declarations: [
@@ -20,9 +27,12 @@ import { HpMatComponent } from './hp-mat/hp-mat.component';
     HotPostComponent,
     LineChartComponent,
     NavbarComponent,
-    HpMatComponent
+    HpMatComponent,
   ],
   imports: [
+    CommonModule,
+    // PlotlyModule,
+    PlotlyViaCDNModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

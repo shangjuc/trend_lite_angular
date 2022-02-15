@@ -42,6 +42,8 @@ export interface Post {
   share_count?: number,
   comment_count?: number,
   engagement_score?: number,
+  colors?: any,
+  maxs?:any,
 }
 
 
