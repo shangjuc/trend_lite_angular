@@ -25,6 +25,7 @@
     "@tailwindcss/typography": "^0.5.0",
     "angular-plotly.js": "^4.0.4",
     "plotly.js-dist-min": "^2.9.0",
+    "postcss": "^8.4.6",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "updated": "^2.0.2",
