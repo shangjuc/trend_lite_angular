@@ -1,12 +1,15 @@
-.modebar-group{
-    display: flex !important;
-
+h1{
+  color: #1b9aac;
 }
 
-plotly-plot{
-    background-color: red;
-  }
-  ::ng-deep .modebar-group{
-    display: flex !important;
-  
-  }
+.plot-container{
+  min-height: 500px;
+
+  plotly-plot{
+      background-color: red;
+    }
+    ::ng-deep .modebar-group{
+      display: flex !important;
+
+    }
+}

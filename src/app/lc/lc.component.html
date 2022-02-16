@@ -1,3 +1,17 @@
+<h1>Line Chart</h1>
+<ng-container>
 
-<plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
+  <div>
+    <h2>時序圖: {{resp_query}}</h2>
+
+
+  </div>
+</ng-container>
+<ng-container >
+  <div class="plot-container">
+    <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
+
+  </div>
+
+</ng-container>
 

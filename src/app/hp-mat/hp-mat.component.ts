@@ -2,10 +2,33 @@ import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { translation_zhtw, SearchConfig, Panel, PF, Post, search_config } from '../app.component';
-
+import { translation_zhtw, search_config } from '../app.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
+interface Panel {
+  [pf: string]: PF,
+}
+interface PF {
+  // post_arr: Array<Post>
+  post_arr: Post[],
+  displayed_columns: string[];
+  max_of_columns: any;
+  color_of_columns: any;
+}
+
+interface Post {
+  pf: string,
+  hash: number,
+  content: string,
+  board?: string,
+  from_name?: string,
+  reaction_all?: number,
+  share_count?: number,
+  comment_count?: number,
+  engagement_score?: number,
+  colors?: any,
+  maxs?: any,
+}
 
 @Component({
   selector: 'app-hp-mat',
@@ -22,32 +45,52 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 export class HpMatComponent implements OnInit, AfterViewInit {
 
-  dataSource = new MatTableDataSource<Post>();
-  columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
+
+
   translation_zhtw = translation_zhtw;
   search_config = search_config;
+  resp_query: string = "";
 
+
+  pf: string = "FB";
+  FB: PF = {
+    post_arr: [],
+    displayed_columns: ['reaction_all', 'comment_count', 'share_count', 'engagement_score'],
+    max_of_columns: {},
+    color_of_columns: {},
+  };
+  FORUM: PF = {
+    post_arr: [],
+    displayed_columns: ['push', 'boo_count', 'dif_count'],
+    max_of_columns: {},
+    color_of_columns: {},
+  }
+  HP: Panel = {
+    FB: this.FB,
+    FORUM: this.FORUM,
+  }
+
+  temp_colors: string[] = ['255, 59, 17,', '125, 206, 160,', '133, 193, 233,', '165, 105, 189,']
+  dataSource = new MatTableDataSource<Post>();
+  columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
   expandedElement: Post | null = null;
   expandedElementArr: Post[] = [];
+  expand_all: boolean = false;
+  totalCount: number = 0;
+
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
+  // constructor() { }
 
-  constructor() { }
-
-  ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-  }
 
   ngOnInit(): void {
 
     this.read_url().then((params) => {
 
-
       if(this.search_config.pf !== ""){
         this.pf = this.search_config.pf;
       }
-
 
       if (this.search_config.q !== "") {
         this.fetch_data().then((resp) => {
@@ -64,36 +107,11 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     })
   }
 
-  expand_all: boolean = false;
-
-  pf: string = "FB";
-  page: number = 1;
-  page_arr: Array<number> = [];
-
-  FB: PF = {
-    post_arr: [],
-    displayed_columns: ['reaction_all', 'comment_count', 'share_count', 'engagement_score'],
-    max_of_columns: {},
-    color_of_columns: {},
-  };
-  FORUM: PF = {
-    post_arr: [],
-    displayed_columns: ['push', 'boo_count', 'dif_count'],
-    max_of_columns: {},
-    color_of_columns: {},
-  }
-
-  HP: Panel = {
-    FB: this.FB,
-    FORUM: this.FORUM,
+  ngAfterViewInit() {
+    // this.dataSource.paginator = this.paginator;
   }
 
 
-
-  query: string = "";
-  resp_query: string = "";
-
-  totalCount: number = 0;
 
   toggle_post_open_mat(post: Post): void {
     if (this.expandedElementArr.includes(post)) {
@@ -129,7 +147,6 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     return await response.json()
   }
 
-  temp_colors: string[] = ['255, 59, 17,', '125, 206, 160,', '133, 193, 233,', '165, 105, 189,']
 
   convert_resp(resp: any) {
     // console.log(resp)
@@ -209,7 +226,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     this.reset_table_data(pf);
     this.set_url_pf(pf);
   }
-  
+
 
 
   set_url_pf(pf:string):void{

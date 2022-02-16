@@ -21,31 +21,6 @@ export const search_config: SearchConfig  = {
 }
 
 
-export interface Panel {
-  [pf: string]: PF,
-}
-export interface PF {
-  // post_arr: Array<Post>
-  post_arr: Post[],
-  displayed_columns: string[];
-  max_of_columns: any;
-  color_of_columns: any;
-}
-
-export interface Post {
-  pf: string,
-  hash: number,
-  content: string,
-  board?: string,
-  from_name?: string,
-  reaction_all?: number,
-  share_count?: number,
-  comment_count?: number,
-  engagement_score?: number,
-  colors?: any,
-  maxs?:any,
-}
-
 
 export const translation_zhtw: Translation = {
   'hash': 'No.',
