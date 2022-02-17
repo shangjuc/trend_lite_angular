@@ -10,7 +10,7 @@ import { translation_zhtw, search_config } from '../app.component';
   styleUrls: ['./mcp.component.scss']
 })
 export class McpComponent implements OnInit {
-  panels: PanelItem[] = [];
+  panels: any = {};
   panel_type: string = "";
   search_config = search_config;
   selected_pls:any = [];
