@@ -42,9 +42,9 @@ export class PanelBannerComponent implements AfterViewInit, OnDestroy {
     console.log(this.panel_type);
 
     let panelItem = this.panels[0];
-    if(this.panel_type === 'hp-mat'){
+    if(this.panel_type === 'HP'){
       panelItem = this.panels[1];
-    } else if (this.panel_type === 'lc'){
+    } else if (this.panel_type === 'LC'){
       panelItem = this.panels[0];
     }
     const viewContainerRef = this.panelHost.viewContainerRef;

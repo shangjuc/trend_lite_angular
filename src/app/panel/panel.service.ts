@@ -19,23 +19,5 @@ export class PanelService {
 
     ];
   }
-  getPanels_by_type(type:string) {
-    if(type === 'hp-mat'){
-      return [
-          new PanelItem(
-          HpMatComponent,
-          { name: '', bio: '' })
-      ]
-    } else if(type === 'lc'){
-      return [
-          new PanelItem(
-          LineChartComponent,
-          { name: '', bio: '' }
-        )
-      ]
-    } else {
-      return []
-    }
 
-  }
 }

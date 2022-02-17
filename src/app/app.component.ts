@@ -10,6 +10,7 @@ export interface SearchConfig {
   et: string,
   pf: string,
   pfs: string,
+  pls: string,
 }
 
 export const search_config: SearchConfig  = {
@@ -18,6 +19,7 @@ export const search_config: SearchConfig  = {
   et: "",
   pf: "FB",
   pfs: "FB,FORUM",
+  pls: "LC,HP"
 }
 
 
