@@ -19,20 +19,16 @@ import { HpMatComponent } from './hp-mat/hp-mat.component';
 import { McpComponent } from './mcp/mcp.component';
 import { SearchComponent } from './search/search.component';
 
+import { PanelBannerComponent } from './panel/panel-banner.component';
+import { PanelDirective } from './panel/panel.directive';
+import { PanelService } from './panel/panel.service';
+
+
 // PlotlyModule.plotlyjs = PlotlyJS;
 PlotlyViaCDNModule.setPlotlyVersion('latest');
 PlotlyViaCDNModule.setPlotlyBundle('basic');
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HotPostComponent,
-    LineChartComponent,
-    NavbarComponent,
-    HpMatComponent,
-    McpComponent,
-    SearchComponent,
-  ],
   imports: [
     CommonModule,
     // PlotlyModule,
@@ -44,7 +40,18 @@ PlotlyViaCDNModule.setPlotlyBundle('basic');
     MatTableModule,
     MatPaginatorModule,
   ],
-  providers: [],
+  providers: [PanelService],
+  declarations: [
+    AppComponent,
+    HotPostComponent,
+    LineChartComponent,
+    NavbarComponent,
+    HpMatComponent,
+    McpComponent,
+    SearchComponent,
+    PanelBannerComponent,
+    PanelDirective,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
