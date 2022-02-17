@@ -7,9 +7,14 @@ nav {
             a {
                 display: block;
                 @apply p-4 cursor-pointer;
+
                 &:hover {
                     @apply bg-slate-400 text-cyan-50;
                 }
+                &.active{
+                  @apply bg-slate-800 text-cyan-50
+                }
+
             }
         }
     }

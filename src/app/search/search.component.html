@@ -1,11 +1,18 @@
 <div class="flex flex-wrap justify-center">
 
-  <div class="search-params border-2 p-10">
+  <div class="search-params border-2 p-10  rounded-lg">
 
     <ng-container>
       <div class="search-param-container">
         <h2>請輸入關鍵字:</h2>
         <input type="text" [(ngModel)]="temp_config.q" (keydown)="enter_input_param('q',$event)" #ctrl="ngModel" required>
+      </div>
+    </ng-container>
+
+    <ng-container>
+      <div  class="search-param-container">
+        <h2>請選擇渠道:</h2>
+        <input type="text" [(ngModel)]="temp_config.pfs" (keydown)="enter_input_param('pfs',$event)" #ctrl="ngModel" required>
       </div>
     </ng-container>
 
@@ -18,7 +25,7 @@
 
     <ng-container>
       <div class="search-param-container">
-        <button class="border-2 p-2 w-full" (click)="click_search()">搜尋</button>
+        <button class="bg-slate-800 border-slate-800 text-cyan-50 rounded-md border-2 p-2 w-full" (click)="click_search()">搜尋</button>
       </div>
     </ng-container>
   </div>
