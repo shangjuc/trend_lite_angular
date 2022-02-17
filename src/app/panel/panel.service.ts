@@ -10,11 +10,11 @@ export class PanelService {
     return {
       HP: new PanelItem(
         HpMatComponent,
-        { name: '', bio: '' }
+        { name: ''}
       ),
       LC: new PanelItem(
         LineChartComponent,
-        { name: '', bio: '' }
+        { name: ''}
       ),
     }
   }

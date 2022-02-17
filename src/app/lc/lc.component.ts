@@ -1,5 +1,5 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
+import { formatDate } from '@angular/common';
 import { translation_zhtw, search_config } from '../app.component';
 
 
@@ -77,11 +77,6 @@ export class LineChartComponent implements OnInit {
 
     let urlstr: string = document.location.toString();
     let params: any = new URL(urlstr).searchParams;
-    this.search_config.q = params.get('q') || "";
-    this.search_config.st = params.get('st') || "";
-    this.search_config.et = params.get('et') || "";
-    this.search_config.pf = params.get('pf') || "";
-    this.search_config.pfs = params.get('pfs') || "";
     return await params
   }
 

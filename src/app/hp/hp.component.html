@@ -1,16 +1,5 @@
 <h1>Hot Post</h1>
 
-<ng-container >
-  <div *ngIf="false">
-    <h2>請輸入關鍵字:</h2>
-    <input type="text" [(ngModel)]="temp_query" (keydown)="enter_input_query($event)" #ctrl="ngModel" required>
-    <button class="border-2 p-2" (click)="click_input_query()">Search</button>
-    <p>temp_query:{{temp_query}}</p>
-    <p>resp_query:{{resp_query}}</p>
-  </div>
-</ng-container>
-
-
 <ng-container *ngIf="resp_query !== ''">
   <div class="pf-btn-container flex justify-between">
     <div class="container-left">

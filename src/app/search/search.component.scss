@@ -1,0 +1,13 @@
+.search-params{
+  width: 500px;
+  .search-param-container{
+    @apply flex flex-wrap justify-center w-full p-2;
+    input{
+      @apply w-full
+    }
+    h2 {
+      @apply w-full text-center
+    }
+  }
+}
+

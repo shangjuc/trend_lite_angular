@@ -30,7 +30,7 @@ interface SearchConfig {
 
 export class HotPostComponent implements OnInit {
 
-  constructor() { 
+  constructor() {
 
   }
 
@@ -51,7 +51,7 @@ export class HotPostComponent implements OnInit {
     FB: this.FB,
     FORUM: this.FORUM,
   }
-  
+
   search_config:SearchConfig = {
     q: "",
     st: "",
@@ -61,7 +61,6 @@ export class HotPostComponent implements OnInit {
   displayedColumns: string[] = ['hash', 'from_name', 'content'];
 
   query:string = "";
-  temp_query:string = "";
   resp_query:string = "";
 
   toggle_post_open(post_idx: number):void{
@@ -104,7 +103,7 @@ export class HotPostComponent implements OnInit {
     let params:any = new URL(urlstr).searchParams;
     return await params
   }
-  
+
   async fetch_data():Promise<void> {
     this.resp_query = "";
 
@@ -127,7 +126,7 @@ export class HotPostComponent implements OnInit {
               item.pf = "FORUM";
               item.hash = i + 1;
               item.from_name = item.board;
-  
+
               // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
               // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
               temp_arr.push(item);
@@ -136,7 +135,7 @@ export class HotPostComponent implements OnInit {
             // this.FORUM.post_arr = temp_arr.slice(0, 110);
             this.FORUM.post_arr = temp_arr;
             this.count_final_page();
-  
+
           }
           if ("fb_raw" in resp.data[0]) {
             let raw = resp.data[0]["fb_raw"];
@@ -153,33 +152,9 @@ export class HotPostComponent implements OnInit {
             arr = temp_arr;
             this.FB.post_arr = temp_arr.slice(0,99);
             this.count_final_page();
-  
+
           }
           // console.log(this)
-  }
-  enter_input_query(event:any): void{
-
-    if(event.keyCode === 13){
-      // console.log("13");
-      this.click_input_query();
-    }
-  }
-  click_input_query(): void{
-
-    this.search_config.q = this.temp_query;
-    this.fetch_data().then((resp)=>{
-      this.resp_query = this.temp_query;
-      this.convert_resp(resp);
-      // processAjaxData(null, "AAAAA");
-      let urlstr:string = document.location.toString();
-      const url = new URL(urlstr);
-      url.searchParams.set('q', this.search_config.q);
-      window.history.pushState({}, '', url);
-    })
-    .catch(e => {
-      console.log('錯誤! 描述: ' + e.message);
-    }); 
-  
   }
 
   ngOnInit(): void {
@@ -193,18 +168,18 @@ export class HotPostComponent implements OnInit {
 
       if(!query){
         console.log("Please input your query")
-        this.search_config.q = "";
+        // this.search_config.q = "";
 
       } else {
-        this.search_config.q = query;
+        // this.search_config.q = query;
         this.fetch_data().then((resp)=>{
           this.resp_query = this.search_config.q;
           this.convert_resp(resp)
         })
         .catch(e => {
           console.log('錯誤! 描述: ' + e.message);
-        }); 
-      }  
+        });
+      }
     })
   }
 

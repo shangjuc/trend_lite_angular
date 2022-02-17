@@ -1,9 +1,26 @@
+<div class="flex flex-wrap justify-center">
 
-<ng-container>
-    <div>
-      <h2>請輸入關鍵字:</h2>
-      <input type="text" [(ngModel)]="temp_query" (keydown)="enter_input_query($event)" #ctrl="ngModel" required>
-      <button class="border-2 p-2" (click)="click_input_query()">Search</button>
-    </div>
-  </ng-container>
-  
+  <div class="search-params border-2 p-10">
+
+    <ng-container>
+      <div class="search-param-container">
+        <h2>請輸入關鍵字:</h2>
+        <input type="text" [(ngModel)]="temp_config.q" (keydown)="enter_input_param('q',$event)" #ctrl="ngModel" required>
+      </div>
+    </ng-container>
+
+    <ng-container>
+      <div  class="search-param-container">
+        <h2>請選擇儀表板:</h2>
+        <input type="text" [(ngModel)]="temp_config.pls" (keydown)="enter_input_param('pls',$event)" #ctrl="ngModel" required>
+      </div>
+    </ng-container>
+
+    <ng-container>
+      <div class="search-param-container">
+        <button class="border-2 p-2 w-full" (click)="click_search()">搜尋</button>
+      </div>
+    </ng-container>
+  </div>
+</div>
+

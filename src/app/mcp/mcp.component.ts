@@ -30,8 +30,8 @@ export class McpComponent implements OnInit {
 
     let urlstr: string = document.location.toString();
     let params: any = new URL(urlstr).searchParams;
-    this.search_config.pls = params.get('pls') || "";
-    this.selected_pls = this.search_config.pls.split(",");
+    let pls = params.get('pls') || "";
+    this.selected_pls = pls.split(",");
     return await params
   }
 

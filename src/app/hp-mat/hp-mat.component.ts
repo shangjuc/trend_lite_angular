@@ -128,11 +128,6 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
     let urlstr: string = document.location.toString();
     let params: any = new URL(urlstr).searchParams;
-    this.search_config.q = params.get('q') || "";
-    this.search_config.st = params.get('st') || "";
-    this.search_config.et = params.get('et') || "";
-    this.search_config.pf = params.get('pf') || "";
-    this.search_config.pfs = params.get('pfs') || "";
     return await params
   }
 

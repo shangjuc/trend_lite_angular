@@ -23,6 +23,10 @@ export class PanelBannerComponent implements AfterViewInit, OnDestroy {
 
   loadComponent_by_type() {
     console.log(this.panel_type);
+
+    if( !["HP","LC"].includes(this.panel_type)){
+      return;
+    }
     let panelItem = this.panels[this.panel_type];
     const viewContainerRef = this.panelHost.viewContainerRef;
     viewContainerRef.clear();
