@@ -37,7 +37,7 @@ export class PanelBannerComponent implements AfterViewInit, OnDestroy {
     const componentRef = viewContainerRef.createComponent<PanelComponent>(panelItem.component);
     componentRef.instance.data = panelItem.data;
   }
-  loadComponent_bytype() {
+  loadComponent_by_type() {
     // this.currentPanelIndex = (this.currentPanelIndex + 1) % this.panels.length;
     console.log(this.panel_type);
 
@@ -56,11 +56,14 @@ export class PanelBannerComponent implements AfterViewInit, OnDestroy {
 
   getPanels() {
     setTimeout(() => {
-      this.loadComponent_bytype();
+      this.loadComponent_by_type();
 
     }, 1000);
-    // this.interval = setInterval(() => {
-    //  this.loadComponent();
-    // }, 3000);
   }
+  // getPanels() {
+
+  //   this.interval = setInterval(() => {
+  //    this.loadComponent();
+  //   }, 3000);
+  // }
 }
