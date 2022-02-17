@@ -9,6 +9,7 @@ import { PanelItem } from '../panel/panel-item';
 })
 export class McpComponent implements OnInit {
   panels: PanelItem[] = [];
+  paneltype: string = "";
   constructor(private panelService: PanelService) { }
 
   ngOnInit(): void {

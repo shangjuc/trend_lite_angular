@@ -1,5 +1,8 @@
 <!-- <app-panel-banner [panels]="panels"></app-panel-banner> -->
-<app-panel-banner [panels]="panels" *ngFor="let item of [1,2]"></app-panel-banner>
+<ng-container *ngFor="let item of ['hp-mat','lc','hp-mat']">
+  <app-panel-banner [panels]="panels"  [panel_type]="item"></app-panel-banner>
+
+</ng-container>
 
 <!-- <app-lc></app-lc>
 

@@ -10,6 +10,7 @@ import { PanelComponent } from './panel.component';
 })
 export class PanelBannerComponent implements AfterViewInit, OnDestroy {
   @Input() panels: PanelItem[] = [];
+  @Input() panel_type: string = "hp-mat";
 
   currentPanelIndex = -1;
 
@@ -18,7 +19,7 @@ export class PanelBannerComponent implements AfterViewInit, OnDestroy {
   interval: any;
 
   ngAfterViewInit() {
-    this.loadComponent();
+    // this.loadComponent();
     this.getPanels();
   }
 
@@ -36,21 +37,28 @@ export class PanelBannerComponent implements AfterViewInit, OnDestroy {
     const componentRef = viewContainerRef.createComponent<PanelComponent>(panelItem.component);
     componentRef.instance.data = panelItem.data;
   }
-  loadComponent_list() {
+  loadComponent_bytype() {
     // this.currentPanelIndex = (this.currentPanelIndex + 1) % this.panels.length;
-    console.log(this.panels)
-    const panelItem = this.panels[0];
+    console.log(this.panel_type);
+
+    let panelItem = this.panels[0];
+    if(this.panel_type === 'hp-mat'){
+      panelItem = this.panels[1];
+    } else if (this.panel_type === 'lc'){
+      panelItem = this.panels[0];
+    }
     const viewContainerRef = this.panelHost.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent<PanelComponent>(panelItem.component);
     componentRef.instance.data = panelItem.data;
+
   }
 
   getPanels() {
     setTimeout(() => {
-      this.loadComponent_list();
+      this.loadComponent_bytype();
 
-    }, 3000);
+    }, 1000);
     // this.interval = setInterval(() => {
     //  this.loadComponent();
     // }, 3000);

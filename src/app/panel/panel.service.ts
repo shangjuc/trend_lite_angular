@@ -9,11 +9,11 @@ export class PanelService {
   getPanels() {
     return [
       new PanelItem(
-        HpMatComponent,
+        LineChartComponent,
         { name: '', bio: '' }
       ),
       new PanelItem(
-        LineChartComponent,
+        HpMatComponent,
         { name: '', bio: '' }
       ),
 
