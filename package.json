@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "dev": "cross-env NODE_ENV=development && ng serve",
-    "build": "cross-env NODE_ENV=production && ng build --prod --deploy-url /trend_lite_ng2/ --output-path ../analytics_gae/static/trend_lite_ng2_dist/static ",
+    "dev": "cross-env NODE_ENV=development && ng serve ",
+    "build": "cross-env NODE_ENV=production && ng build --base-href /trend_lite_ng2/  --deploy-url /trend_lite_ng2/assets/ --output-path ./dist/static ",
+    "build2": "cross-env NODE_ENV=production && ng build --base-href /trend_lite_ng2/ --deploy-url /trend_lite_ng2/assets/ --output-path ../analytics_gae/static/trend_lite_ng2_dist/static ",
+
+    "ah_server": "angular-http-server -p 9000 --base-href trend-lite-ng2 --path ./dist/static",
     "live_server": "cd ./dist/static && live-server --port=9000 --entry-file=./index.html",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
