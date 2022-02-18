@@ -137,9 +137,9 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   async fetch_data(): Promise<void> {
     this.resp_query = "";
 
-    let url = `${this.server_origin}/trendapi/api_analytics_hotpost?`;
+    let url = `${this.server_origin}/trendapi/api_analytics_hotposts?`;
     let params = {
-      q: this.search_config.q,
+      q: JSON.stringify(this.search_config.q.split(',')),
       st: this.search_config.st,
       et: this.search_config.et,
       nation: this.search_config.nation,
