@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { search_config } from '../app.component';
+import { search_config } from '../app-config/searchconfig';
 
 
 @Component({

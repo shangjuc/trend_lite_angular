@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { formatDate } from '@angular/common';
-import { translation_zhtw, search_config } from '../app.component';
+import { search_config } from '../app-config/searchconfig';
+import { translation_zhtw } from '../app-config/translation';
+
 
 
 interface Panel {

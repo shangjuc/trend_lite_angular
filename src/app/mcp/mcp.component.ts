@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
-import { PanelService } from '../panel/panel.service';
+import { translation_zhtw } from '../app-config/translation';
+import { search_config } from '../app-config/searchconfig';
 import { PanelItem } from '../panel/panel-item';
-import { translation_zhtw, search_config } from '../app.component';
+import { PanelService } from '../panel/panel.service';
+
+
 
 @Component({
   selector: 'app-mcp',

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { formatDate } from '@angular/common';
-import { SearchConfig, search_config } from '../app.component';
+import { SearchConfig, search_config } from '../app-config/searchconfig';
 import {Router} from '@angular/router';
 
 @Component({

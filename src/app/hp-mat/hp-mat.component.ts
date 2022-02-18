@@ -2,8 +2,10 @@ import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { translation_zhtw, search_config } from '../app.component';
+import { search_config } from '../app-config/searchconfig';
+import { translation_zhtw } from '../app-config/translation';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { server_origin } from '../app-config/location'
 
 interface Panel {
   [pf: string]: PF,
@@ -49,6 +51,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
   translation_zhtw = translation_zhtw;
   search_config = search_config;
+  server_origin = server_origin;
   resp_query: string = "";
 
 
@@ -134,7 +137,17 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   async fetch_data(): Promise<void> {
     this.resp_query = "";
 
-    let response = await fetch(`http://localhost:3000/trendapi/api_analytics_hotpost?q=${this.search_config.q}`);
+    let url = `${this.server_origin}/trendapi/api_analytics_hotpost?`;
+    let params = {
+      q: this.search_config.q,
+      st: this.search_config.st,
+      et: this.search_config.et,
+      nation: this.search_config.nation,
+      channels: JSON.stringify(this.search_config.pfs.split(","))
+    }
+
+    // let response = await fetch(`http://localhost:3000/trendapi/api_analytics_hotpost?q=${this.search_config.q}`);
+    let response = await fetch(url + String(new URLSearchParams(params)));
 
     if (!response.ok) {
       throw new Error(`HTTP 錯誤 status: ${response.status}`);
