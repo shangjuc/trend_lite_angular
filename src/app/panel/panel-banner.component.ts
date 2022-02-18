@@ -9,7 +9,7 @@ import { PanelComponent } from './panel.component';
   templateUrl: './panel-banner.component.html',
 })
 export class PanelBannerComponent implements AfterViewInit, OnDestroy {
-  @Input() panels: any = {};
+  @Input() panel_list: any = {};
   @Input() panel_type: string = "";
 
   @ViewChild(PanelDirective, {static: true}) panelHost!: PanelDirective;
@@ -27,7 +27,7 @@ export class PanelBannerComponent implements AfterViewInit, OnDestroy {
     if( !["HP","LC"].includes(this.panel_type)){
       return;
     }
-    let panelItem = this.panels[this.panel_type];
+    let panelItem = this.panel_list[this.panel_type];
     const viewContainerRef = this.panelHost.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent<PanelComponent>(panelItem.component);

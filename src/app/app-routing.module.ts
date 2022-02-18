@@ -7,12 +7,12 @@ import { McpComponent } from './mcp/mcp.component';
 import { SearchComponent } from './search/search.component';
 
 const routes: Routes = [
-  { path: 'search', component: SearchComponent },
-  { path: 'hotpost', component: HotPostComponent },
-  { path: 'hotpost-mat', component: HpMatComponent },
-  { path: 'linechart', component: LineChartComponent },
-  { path: 'mcp', component: McpComponent },
-  { path: '**', component: SearchComponent }
+  { path: 'trend_lite_ng2/search', component: SearchComponent },
+  { path: 'trend_lite_ng2/hotpost', component: HotPostComponent },
+  { path: 'trend_lite_ng2/hotpost-mat', component: HpMatComponent },
+  { path: 'trend_lite_ng2/linechart', component: LineChartComponent },
+  { path: 'trend_lite_ng2/mcp', component: McpComponent },
+  { path: '**', redirectTo: '/trend_lite_ng2/search', pathMatch: 'full'  },
 ];
 
 @NgModule({

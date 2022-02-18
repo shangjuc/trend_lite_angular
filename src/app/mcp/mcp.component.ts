@@ -10,7 +10,7 @@ import { translation_zhtw, search_config } from '../app.component';
   styleUrls: ['./mcp.component.scss']
 })
 export class McpComponent implements OnInit {
-  panels: any = {};
+  panel_list: any = {};
   panel_type: string = "";
   search_config = search_config;
   selected_pls:any = [];
@@ -20,7 +20,7 @@ export class McpComponent implements OnInit {
   ngOnInit(): void {
     this.read_url().then(
       ()=>{
-        this.panels = this.panelService.getPanels();
+        this.panel_list = this.panelService.getPanels();
       }
     )
   }

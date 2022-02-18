@@ -50,7 +50,7 @@ export class SearchComponent implements OnInit {
     let navigationExtras = {
       queryParams: this.search_config,
     };
-    this.route.navigate(['/mcp'], navigationExtras);
+    this.route.navigate(['trend_lite_ng2/mcp'], navigationExtras);
   }
 
   set_url_param(param_key:string, param_value:string):void{
