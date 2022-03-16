@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { search_config } from '../app-config/searchconfig';
 import { translation_zhtw } from '../app-config/translation';
+import { server_origin } from '../app-config/location'
 
 
 
@@ -31,6 +32,7 @@ export class LineChartComponent implements OnInit {
 
   translation_zhtw = translation_zhtw;
   search_config = search_config;
+  server_origin = server_origin;
   resp_query: string = "";
   // formatDate = formatDate;
 
@@ -83,9 +85,19 @@ export class LineChartComponent implements OnInit {
   }
 
   async fetch_data(): Promise<void> {
-    // this.resp_query = "";
 
-    let response = await fetch(`http://localhost:3000/trendapi/api_analytics_timeseries?q=${this.search_config.q}`);
+    // this.resp_query = "";
+    let url = `${this.server_origin}/trendapi/api_analytics_timeseries?`;
+    let params = {
+      q: JSON.stringify(this.search_config.q.split(',')),
+      st: this.search_config.st,
+      et: this.search_config.et,
+      nation: this.search_config.nation,
+      channels: JSON.stringify(this.search_config.pfs.split(","))
+    }
+
+    // let response = await fetch(`http://localhost:3000/trendapi/api_analytics_timeseries?q=${this.search_config.q}`);
+    let response = await fetch(url + String(new URLSearchParams(params)));
 
     if (!response.ok) {
       throw new Error(`HTTP 錯誤 status: ${response.status}`);
