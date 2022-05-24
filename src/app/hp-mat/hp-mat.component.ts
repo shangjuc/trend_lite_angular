@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,14 +6,15 @@ import { search_config } from '../app-config/searchconfig';
 import { translation_zhtw } from '../app-config/translation';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { server_origin } from '../app-config/location'
+import { formatDate } from '@angular/common';
 
 interface Panel {
-  [pf: string]: PF,
+  [pf: string]: Platform,
 }
-interface PF {
+interface Platform {
   // post_arr: Array<Post>
   post_arr: Post[],
-  displayed_columns: string[];
+  selected_columns: string[];
   max_of_columns: any;
   color_of_columns: any;
 }
@@ -29,7 +30,7 @@ interface Post {
   comment_count?: number,
   engagement_score?: number,
   colors?: any,
-  maxs?: any,
+  maxes?: any,
 }
 
 @Component({
@@ -55,16 +56,16 @@ export class HpMatComponent implements OnInit, AfterViewInit {
   resp_query: string = "";
 
 
-  pf: string = "FB";
-  FB: PF = {
+  pf_now: string = "FB";
+  FB: Platform = {
     post_arr: [],
-    displayed_columns: ['reaction_all', 'comment_count', 'share_count', 'engagement_score'],
+    selected_columns: ['reaction_all', 'comment_count', 'share_count', 'engagement_score'],
     max_of_columns: {},
     color_of_columns: {},
   };
-  FORUM: PF = {
+  FORUM: Platform = {
     post_arr: [],
-    displayed_columns: ['push', 'boo_count', 'dif_count'],
+    selected_columns: ['push', 'boo_count', 'dif_count'],
     max_of_columns: {},
     color_of_columns: {},
   }
@@ -75,7 +76,8 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
   temp_colors: string[] = ['255, 59, 17,', '125, 206, 160,', '133, 193, 233,', '165, 105, 189,']
   dataSource = new MatTableDataSource<Post>();
-  columnsToDisplay: string[] = ['hash', 'from_name', 'content'];
+  default_columns: string[] = ['hash', 'from_name', 'content', 'time'];
+  columnsToDisplay: string[] = [];
   expandedElement: Post | null = null;
   expandedElementArr: Post[] = [];
   expand_all: boolean = false;
@@ -84,7 +86,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
-  // constructor() { }
+  constructor(@Inject(LOCALE_ID) private locale: string) { }
 
 
   ngOnInit(): void {
@@ -92,7 +94,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     this.read_url().then((params) => {
 
       if(this.search_config.pf !== ""){
-        this.pf = this.search_config.pf;
+        this.pf_now = this.search_config.pf;
       }
 
       if (this.search_config.q !== "") {
@@ -169,9 +171,9 @@ export class HpMatComponent implements OnInit, AfterViewInit {
         let raw = resp.data[0][pf_item[1]];
         let temp_arr = [];
         let temp_pf = pf_item[0];
-        for (let i = 0; i < this.HP[temp_pf].displayed_columns.length; i++) {
-          this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[i]] = 0;
-          this.HP[temp_pf].color_of_columns[this.HP[temp_pf].displayed_columns[i]] = this.temp_colors[i];
+        for (let i = 0; i < this.HP[temp_pf].selected_columns.length; i++) {
+          this.HP[temp_pf].max_of_columns[this.HP[temp_pf].selected_columns[i]] = 0;
+          this.HP[temp_pf].color_of_columns[this.HP[temp_pf].selected_columns[i]] = this.temp_colors[i];
         }
         for (let i = 0; i < raw.length; i++) {
           let item = raw[i];
@@ -183,21 +185,20 @@ export class HpMatComponent implements OnInit, AfterViewInit {
           if (temp_pf === "FB"){
             item.content = item.text;
           }
-          // item.time = format(item.ts, 'yyyy-MM-dd HH:mm');
-          // item.time2 = format(item.ts, 'yyyy年MM月dd日 HH:mm');
+          item.time = formatDate(item.ts, 'yyyy-MM-dd HH:mm', this.locale);
           item.engagement_score = Math.floor(item.engagement_score * 10) / 10;
           temp_arr.push(item);
           item.colors = {};
-          item.maxs = {};
-          for (let j = 0; j < this.HP[temp_pf].displayed_columns.length; j++) {
-            this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[j]] = Math.max(this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[j]], item[this.HP[temp_pf].displayed_columns[j]]);
+          item.maxes = {};
+          for (let j = 0; j < this.HP[temp_pf].selected_columns.length; j++) {
+            this.HP[temp_pf].max_of_columns[this.HP[temp_pf].selected_columns[j]] = Math.max(this.HP[temp_pf].max_of_columns[this.HP[temp_pf].selected_columns[j]], item[this.HP[temp_pf].selected_columns[j]]);
           }
         }
         for (let i = 0; i < raw.length; i++) {
           let item = raw[i];
-          for (let j = 0; j < this.HP[temp_pf].displayed_columns.length; j++) {
-            item.colors[this.HP[temp_pf].displayed_columns[j]] = this.HP[temp_pf].color_of_columns[this.HP[temp_pf].displayed_columns[j]]
-            item.maxs[this.HP[temp_pf].displayed_columns[j]] = this.HP[temp_pf].max_of_columns[this.HP[temp_pf].displayed_columns[j]]
+          for (let j = 0; j < this.HP[temp_pf].selected_columns.length; j++) {
+            item.colors[this.HP[temp_pf].selected_columns[j]] = this.HP[temp_pf].color_of_columns[this.HP[temp_pf].selected_columns[j]]
+            item.maxes[this.HP[temp_pf].selected_columns[j]] = this.HP[temp_pf].max_of_columns[this.HP[temp_pf].selected_columns[j]]
           }
 
         }
@@ -206,7 +207,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
       }
     })
 
-    this.reset_table_data(this.pf);
+    this.reset_table_data(this.pf_now);
     console.log(this)
   }
 
@@ -215,7 +216,7 @@ export class HpMatComponent implements OnInit, AfterViewInit {
 
     let bg_color = "#FFF";
     if (element.colors[column]){
-      bg_color = `rgba(${element.colors[column]} ${element[column] / element.maxs[column]})`;
+      bg_color = `rgba(${element.colors[column]} ${element[column] / element.maxes[column]})`;
     }
     // console.log(bg_color)
     return bg_color;
@@ -226,11 +227,11 @@ export class HpMatComponent implements OnInit, AfterViewInit {
     this.dataSource = new MatTableDataSource<Post>(arr);
     this.totalCount = arr.length;
     this.dataSource.paginator = this.paginator;
-    this.columnsToDisplay = ['hash', 'from_name', 'content',].concat(this.HP[pf].displayed_columns);
+    this.columnsToDisplay = this.default_columns.concat(this.HP[pf].selected_columns);
   }
 
   click_pf(pf:string){
-    this.pf = pf;
+    this.pf_now = pf;
     this.reset_table_data(pf);
     this.set_url_pf(pf);
   }

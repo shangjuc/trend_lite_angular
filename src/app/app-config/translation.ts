@@ -1,6 +1,6 @@
 
 export interface Translation {
-  [key: string]: string
+  [propName: string]: string
 }
 
 
@@ -15,4 +15,5 @@ export const translation_zhtw: Translation = {
   'push': '推文數',
   'boo_count': '噓文數',
   'dif_count': '淨推數',
+  'time': 'Time'
 }

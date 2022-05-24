@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "dev": "cross-env NODE_ENV=development && ng serve ",
+    "dev": "cross-env NODE_ENV=development && ng serve --port 9487",
     "build": "cross-env NODE_ENV=production && ng build --base-href /trend_lite_ng2/  --deploy-url /trend_lite_ng2/assets/ --output-path ./dist/static ",
     "build2": "cross-env NODE_ENV=production && ng build --base-href /trend_lite_ng2/ --deploy-url /trend_lite_ng2/assets/ --output-path ../analytics_gae/static/trend_lite_ng2_dist/static ",
 

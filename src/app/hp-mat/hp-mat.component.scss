@@ -4,6 +4,8 @@ h1 {
 
 table {
   width: 100%;
+  // width: 600px;
+
 }
 
 tr.example-detail-row {
@@ -28,12 +30,15 @@ tr.example-element-row:not(.example-expanded-row):active {
 .mat-header-cell,
 .mat-cell {
   width: 100px;
+  // min-width: 100px;
+
   text-align: right;
   @apply px-2;
 
   &.hash {
     text-align: left;
     width: 50px;
+    min-width: 50px;
   }
   &.from_name {
     width: 150px;
@@ -44,15 +49,29 @@ tr.example-element-row:not(.example-expanded-row):active {
       max-height: none !important;
     }
   }
+  &.time {
+    width: 150px;
+    min-width: 150px;
+    text-align: left;
+
+    div {
+      overflow: auto;
+      max-height: none !important;
+    }
+  }
   &.content {
     width: auto;
+    max-width: 300px;
     text-align: left;
+    padding: 10px;
     div {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: normal;
+      max-height: 40px;
     }
   }
+
 
   &:first-child {
     @apply pl-4;

@@ -4,8 +4,8 @@
 
   <div>
     <h2>熱門文章: {{resp_query}}</h2>
-    <button class="px-2 py-1 border-2" (click)="click_pf('FB')" [ngClass]="{'bg-slate-300': pf==='FB'}">FB</button>
-    <button class="px-2 py-1 mr-1 border-2" (click)="click_pf('FORUM')" [ngClass]="{'bg-slate-300': pf==='FORUM'}">FORUM</button>
+    <button class="px-2 py-1 border-2" (click)="click_pf('FB')" [ngClass]="{'bg-slate-300': pf_now==='FB'}">FB</button>
+    <button class="px-2 py-1 mr-1 border-2" (click)="click_pf('FORUM')" [ngClass]="{'bg-slate-300': pf_now==='FORUM'}">FORUM</button>
     <button class="px-2 py-1 mx-1 border-2" (click)="expand_all = true" [ngClass]="{hidden: expand_all}">全部展開</button>
     <button class="px-2 py-1 mx-1 border-2" (click)="expand_all = false; expandedElementArr = []"
       [ngClass]="{hidden: !expand_all}">全部收合</button>
@@ -23,8 +23,8 @@
     <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
       <th mat-header-cell *matHeaderCellDef [ngClass]="column"> {{translation_zhtw[column] }} </th>
       <td mat-cell *matCellDef="let element" [ngClass]="column"
-        [ngStyle]="{'background-color': set_bg_color(element, column, pf)}">
-        <div class="max-h-4 overflow-hidden">{{ element[column] }}</div>
+        [ngStyle]="{'background-color': set_bg_color(element, column, pf_now)}">
+        <div class="">{{ element[column] }}</div>
       </td>
     </ng-container>
 

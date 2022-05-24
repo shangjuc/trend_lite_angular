@@ -7,9 +7,9 @@ import { server_origin } from '../app-config/location'
 
 
 interface Panel {
-  [pf: string]: PF,
+  [pf: string]: Platform,
 }
-interface PF {
+interface Platform {
   x:string[],
   y:number[],
   date_obj_arr?: object[] | undefined[]
@@ -38,12 +38,12 @@ export class LineChartComponent implements OnInit {
 
 
   pf: string = "FB";
-  FB: PF = {
+  FB: Platform = {
     x:[],
     y:[],
     date_obj_arr:[]
   };
-  FORUM: PF = {
+  FORUM: Platform = {
     x: [],
     y: [],
     date_obj_arr: []
